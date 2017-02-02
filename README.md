@@ -12,7 +12,7 @@ Srun3k Client written in C for haut network authorization
 
 这是我的思路图，也是要做出来的成品图。
 
-![思路图][1]
+ ![image](https://github.com/CHN-STUDENT/srun3k-client/blob/gh-pages/myidea.jpg)
 
 
 
