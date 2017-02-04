@@ -1,4 +1,4 @@
-#如何在 VS2015 中编译libcurl
+#如何在 VS2015 中静态编译libcurl
 - 这是如何在 VS2015 编译安装笔记
 - 我用的`libcurl 7.28.1`版本编译成功，其他版本我均未成功。
 - 参考教程：官网的[https://curl.haxx.se/libcurl/c/](https://curl.haxx.se/libcurl/c/ "https://curl.haxx.se/libcurl/c/")中的Andrei Jakab's[ Using libcurl with SSH support in Visual Studio 2010](https://curl.haxx.se/libcurl/c/Using-libcurl-with-SSH-support-in-Visual-Studio-2010.pdf " Using libcurl with SSH support in Visual Studio 2010") [PDF]
