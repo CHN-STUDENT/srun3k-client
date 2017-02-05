@@ -15,38 +15,75 @@ https://ffis.me/jiaowu/srun.html
 ------------
 源码实现
 
-    #include <stdio.h>
-    #include <string.h>
-    int main(void)
-    {
-    	char username[100]="";
-    	char username_encrypt[100]="{SRUN3}\r\n";
-    	char password[100]="";
-    	char password_encrypt[100]="";
-    	char key[]="1234567890";
-    	printf("请输入用户名:");
-    	gets(username);
-    	int i;
-    	for(i=0;i<strlen(username);++i)
-    	{
-    			username[i]=username[i]+4;
-    	} 
-    	strcat(username_encrypt,username);
-    	printf("请输入密码:");
-    	gets(password);
-    	for(i=0;i<strlen(password);++i)
-    	{
-    			int ki=password[i]^key[strlen(key)-i%strlen(key)-1];
-    			char _l[2]={(char)((ki&0x0f)+0x36)};
-    			char _h[2]={(char)((ki>>4&0x0f)+0x63)};
-    			if(i%2==0)
-    				strcat(password_encrypt,strcat(_l,_h));
-    			else
-    				strcat(password_encrypt,strcat(_h,_l));
-    	}
-    	puts(username_encrypt);
-    	puts(password_encrypt);
-    }
+```c
+#include "stdafx.h"
+#include <stdio.h>
+#include <conio.h>
+#include <string.h>
+int main()
+{
+	char username[20];
+	char password[20];
+	char key[] = "1234567890";//加密key
+	char password_encrypt[50] = "";
+	unsigned int i;
+	printf("请输入你要用户名:");
+	gets_s(username);
+	/*用户名加密部分开始*/
+	for (i = 0; i<strlen(username); ++i)
+	{
+		username[i] = username[i] + 4;
+	}
+	/*用户名加密部分结束*/
+	printf("请输入你要登录的密码（不显示）:");
+	/*密码输入部分开始*/
+	char ch;
+	for (i = 0; (ch = _getch()) != 13; )
+	{
+		if (ch == 8)
+		{
+			if (i == 0)
+				password[0] = '\0';
+			else
+			{
+				password[i - 1] = '\0';
+				i--;
+			}
+		}
+		else
+		{
+			password[i] = ch;
+			i++;
+		}
+
+	}
+	password[i] = '\0';
+	printf("\n");
+	/*密码输入部分结束*/
+	/*密码加密部分开始*/
+	for (i = 0; i<strlen(password); ++i)
+	{
+		int ki = password[i] ^ key[strlen(key) - i%strlen(key) - 1];
+		char _l[4] = { (char)((ki & 0x0f) + 0x36) };
+		char _h[4] = { (char)((ki >> 4 & 0x0f) + 0x63) };
+		if (i % 2 == 0)
+		{
+			strcat_s(_l,4, _h);
+			strcat_s(password_encrypt,50,_l);
+		}
+		else
+		{
+			strcat_s(_h,4,_l);
+			strcat_s(password_encrypt,50, _h);
+		}
+	}
+	/*密码加密部分结束*/
+	puts(username);
+	puts(password_encrypt);
+	return 0;
+}
+```
+
 
 过程：
 ---
