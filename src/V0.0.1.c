@@ -1,34 +1,32 @@
 #include <stdio.h>
-#include "stdafx.h"
 #include <curl\curl.h>
 #include <string.h>
 #include <conio.h>
-#define POSTURL "http://172.16.154.130:69/cgi-bin/srun_portal"  //¶¨ÒåPOSTµØÖ·  
+#define POSTURL "http://172.16.154.130:69/cgi-bin/srun_portal"  //å®šä¹‰POSTåœ°å€  
 
 
 int main()
 {
 	char username[20];
-	char post[200] = "action:login&drop:0&pop:1&type:2&n:117&acid:1&username:{SRUN3}\r\n";//Ñ§³¤×¥°ü·ÖÎöµÃµ½µÄÍ·ÎÄ¼ş
-	char post2[200] = "action:login&drop:0&pop:1&type:2&n:117&acid:2&username:{SRUN3}\r\n";//Ñ§³¤×¥°ü·ÖÎöµÃµ½µÄÍ·ÎÄ¼ş
+	char post[200] = "action:login&drop:0&pop:1&type:2&n:117&acid:1&username:{SRUN3}\r\n";//å­¦é•¿æŠ“åŒ…åˆ†æå¾—åˆ°çš„å¤´æ–‡ä»¶
 	char password[20];
-	char key[] = "1234567890";//¼ÓÃÜkey
+	char key[] = "1234567890";//åŠ å¯†key
 	char password_encrypt[50] = "";
 	unsigned int i;
-	printf("+++++++»¶Ó­Ê¹ÓÃĞ£Ô°ÍøµÇÂ½Æ÷CÓïÑÔ°æ+++++++\n");
+	printf("+++++++æ¬¢è¿ä½¿ç”¨æ ¡å›­ç½‘ç™»é™†å™¨Cè¯­è¨€ç‰ˆ+++++++\n");
 	printf("+++++++Made By CHN-STUDENT V0.0.1+++++++\n");
-	printf("ÇëÊäÈëÄãÒªµÇÂ¼µÄÓÃ»§Ãû:");
-	gets_s(username);
-	/*ÓÃ»§Ãû¼ÓÃÜ²¿·Ö¿ªÊ¼*/
+	printf("è¯·è¾“å…¥ä½ è¦ç™»å½•çš„ç”¨æˆ·å:");
+	gets(username);
+	/*ç”¨æˆ·ååŠ å¯†éƒ¨åˆ†å¼€å§‹*/
 	for (i = 0; i<strlen(username); ++i)
 	{
 		username[i] = username[i] + 4;
 	}
-	strcat_s(post, username);//¸´ÖÆ¼ÓÃÜºóÓÃ»§Ãûµ½postÊı¾İ×Ö·û´®
-	strcat_s(post, "&password:");
-	/*ÓÃ»§Ãû¼ÓÃÜ²¿·Ö½áÊø*/
-	printf("ÇëÊäÈëÄãÒªµÇÂ¼µÄÃÜÂë£¨²»ÏÔÊ¾£©:");
-	/*ÃÜÂëÊäÈë²¿·Ö¿ªÊ¼*/
+	strcat(post, username);//å¤åˆ¶åŠ å¯†åç”¨æˆ·ååˆ°postæ•°æ®å­—ç¬¦ä¸²
+	strcat(post, "&password:");
+	/*ç”¨æˆ·ååŠ å¯†éƒ¨åˆ†ç»“æŸ*/
+	printf("è¯·è¾“å…¥ä½ è¦ç™»å½•çš„å¯†ç ï¼ˆä¸æ˜¾ç¤ºï¼‰:");
+	/*å¯†ç è¾“å…¥éƒ¨åˆ†å¼€å§‹*/
 	char ch;
 	for (i = 0; (ch = _getch()) != 13; )
 	{
@@ -51,8 +49,8 @@ int main()
 	}
 	password[i] = '\0';
 	printf("\n");
-	/*ÃÜÂëÊäÈë²¿·Ö½áÊø*/
-	/*ÃÜÂë¼ÓÃÜ²¿·Ö¿ªÊ¼*/
+	/*å¯†ç è¾“å…¥éƒ¨åˆ†ç»“æŸ*/
+	/*å¯†ç åŠ å¯†éƒ¨åˆ†å¼€å§‹*/
 	for (i = 0; i<strlen(password); ++i)
 	{
 		int ki = password[i] ^ key[strlen(key) - i%strlen(key) - 1];
@@ -60,34 +58,33 @@ int main()
 		char _h[4] = { (char)((ki >> 4 & 0x0f) + 0x63) };
 		if (i % 2 == 0)
 		{
-			strcat_s(_l, 4, _h);
-			strcat_s(password_encrypt, 50, _l);
+			strcat(_l, _h);
+			strcat(password_encrypt, _l);
 		}
 		else
 		{
-			strcat_s(_h, 4, _l);
-			strcat_s(password_encrypt, 50, _h);
+			strcat(_h, _l);
+			strcat(password_encrypt, _h);
 		}
 	}
-	/*ÃÜÂë¼ÓÃÜ²¿·Ö½áÊø*/
-	strcat_s(post, password_encrypt);//¸´ÖÆÃÜÂëµ½postÊı¾İ×Ö·û´®
+	/*å¯†ç åŠ å¯†éƒ¨åˆ†ç»“æŸ*/
+	strcat(post, password_encrypt);//å¤åˆ¶å¯†ç åˆ°postæ•°æ®å­—ç¬¦ä¸²
 	CURL *curl;
 	CURLcode res;
-	curl = curl_easy_init();//³õÊ¼»¯libcurl
+	curl = curl_easy_init();//åˆå§‹åŒ–libcurl
 	if (!curl)
 	{
-		fprintf(stderr, "libcurl³õÊ¼»¯Ê§°Ü£¡\n");
+		fprintf(stderr, "libcurlåˆå§‹åŒ–å¤±è´¥ï¼\n");
 		return -1;
 	}
-	curl_easy_setopt(curl, CURLOPT_URL, POSTURL); //ÉèÖÃPOSTµØÖ·
-	curl_easy_setopt(curl, CURLOPT_POSTFIELDS, post);//ÉèÖÃPOST²ÎÊı
+	curl_easy_setopt(curl, CURLOPT_URL, POSTURL); //è®¾ç½®POSTåœ°å€
+	curl_easy_setopt(curl, CURLOPT_POSTFIELDS, post);//è®¾ç½®POSTå‚æ•°
 	res = curl_easy_perform(curl);
 	if (res != CURLE_OK)
 	{
-		printf("POST´íÎó!\n");
+		printf("POSTé”™è¯¯!\n");
 		return -1;
 	}
-	curl_easy_cleanup(curl);//ÇåÀí
+	curl_easy_cleanup(curl);//æ¸…ç†
 	return 0;
 }
-
