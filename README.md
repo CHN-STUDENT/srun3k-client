@@ -18,8 +18,7 @@ Srun3k Client written in C for haut network authorization
 - `V0.0.3`版本小改一下，完成登陆和注销操作。
 - `V0.0.4`版本尝试研究回传结果。
 
-###警告：以上版本均未回学校测试！！可能存在BUG！
-
+###警告：以上版本测试有问题，正在研究如何改进！
 
 ----------
 
