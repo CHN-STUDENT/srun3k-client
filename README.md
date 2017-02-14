@@ -22,6 +22,7 @@ Srun3k Client written in C for haut network authorization
 ###警告：以上版本测试有问题，正在研究如何改进！
 
 - `V0.0.6`改进但并未测试。
+
 ----------
 
 #思路图
