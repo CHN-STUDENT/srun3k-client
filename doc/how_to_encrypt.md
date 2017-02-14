@@ -15,6 +15,109 @@ https://ffis.me/jiaowu/srun.html
 ------------
 源码实现
 
+2016.2.14补充：测试发现用户名和密码的数据必须要urlencode转码，而libcurl刚好有这个函数，所以重新修改，但是有个问题，貌似一个libcurl只能处理一个数据？我多个测试时处理出现了BUG。所以我用了两个libcurl句柄。
+
+
+```c
+#include <stdio.h>
+#include <curl\curl.h>
+#include <string.h>
+#include <conio.h>
+
+int main()
+{
+  	CURL *curl = curl_easy_init();
+	CURL *curl1 = curl_easy_init();//定义CURL句柄，初始化为urlencode做准备
+	if(!(curl&&curl1))
+	//如果非正常初始化 
+	 	printf("\nLibcurl初始化失败，请重新打开本程序重试，如果多次失败，请向我反馈。");
+	if(curl&&curl1)
+	{//如果正常初始化
+		char username[20];
+		char username_Post[50]="{SRUN3}\r\n"; 
+		char POST_LOGIN[200]="action=login&drop=0&pop=1&type=2&n=117&mbytes=0&minutes=0&mac=&username=";
+		char *ptr=POST_LOGIN;
+		while(*ptr!='\0')
+ 		  	ptr++;  
+		printf("请输入你的用户名:");
+		gets(username); 
+		for (int i = 0; i<strlen(username); ++i)
+		{//用户名输入加密 
+			username[i] = username[i] + 4;
+		}
+		strcat(username_Post,username);
+		char *name_urlencode = curl_easy_escape(curl,username_Post,0);
+		while(*name_urlencode!='\0')
+		{
+			*ptr=*name_urlencode;
+			ptr++;
+			name_urlencode++;
+		}
+		for(char *password_Post="&password=";*password_Post!='\0';password_Post++,ptr++)
+		{
+			*ptr=*password_Post;
+		}
+		char password[20];
+		printf("\n请输入你的密码（不显示）:");
+		char ch;
+		unsigned int i;
+		for (i = 0; (ch = getch()) != 13; )
+		{
+			if (ch == 8)
+			{
+				if (i == 0)
+					password[0] = '\0';
+				else
+				{
+					password[i - 1] = '\0';
+					i--;
+				}
+			}
+			else
+			{
+				password[i] = ch;
+				i++;
+			}
+	
+		}
+		password[i] = '\0';
+		printf("\n");
+		char key[] = "1234567890";//加密key
+		char password_encrypt[50] ="";
+		for (i = 0; i<strlen(password); ++i)
+		{
+			int ki = password[i] ^ key[strlen(key) - i%strlen(key) - 1];
+			char _l[4] = { (char)((ki & 0x0f) + 0x36) };
+			char _h[4] = { (char)((ki >> 4 & 0x0f) + 0x63) };
+			if (i % 2 == 0)
+			{
+				strcat(_l, _h);
+				strcat(password_encrypt, _l);
+			}
+			else
+			{
+				strcat(_h, _l);
+				strcat(password_encrypt, _h);
+			}
+		}
+		char *password_urlencode = curl_easy_escape(curl1,password_encrypt,0);
+		while(*password_urlencode !='\0')
+		{
+			*ptr=*password_urlencode ;
+			ptr++;
+			password_urlencode++;
+		}
+		*ptr='\0'; 
+		curl_easy_cleanup(curl);//清理
+		curl_easy_cleanup(curl1);//清理
+		puts(POST_LOGIN);
+	} 
+	return 0;
+}
+```
+
+下面是原来版本，密码和用户名没有经过urlencode转码。
+
 ```c
 #include "stdafx.h"
 #include <stdio.h>
