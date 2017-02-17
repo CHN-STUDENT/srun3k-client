@@ -46,6 +46,7 @@ size_t POST_FEEDBACK(void *ptr, size_t size, size_t nmemb, void *stream)
 			break;
 		} 
 	}
+	printf("\n");
 	system("pause"); 
 	exit(0);
 }
@@ -76,7 +77,7 @@ int main(void)
 	} 
 	if(curl&&curl1)
 	{//如果正常初始化
-		char acid[8]="&acid=";
+		char acid[8]="&ac_id=";
 		char username[20];
 		char username_Post[50]="{SRUN3}\r\n"; 
 		char LOGIN[200]="action=login&drop=0&pop=1&type=2&n=117&mbytes=0&minutes=0&mac=&username=";

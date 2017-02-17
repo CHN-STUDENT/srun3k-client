@@ -8,7 +8,10 @@ size_t GET_INFO(void *ptr)
 	char *k=(char*)ptr;//将void *空指针强制转为char *指针 
 		  	if(*k=='n')
 			{ //如果未登陆 
-				printf("您不在线"); 
+				printf("\n您不在线\n"); 
+				printf("\n");
+				system("pause");
+				exit(0);
 			}
 			else
 			{ //如果已登录 
@@ -39,7 +42,9 @@ size_t GET_INFO(void *ptr)
 						continue;
 					}	
 				}
-				
+				printf("\n");
+				system("pause");
+				exit(0);
 			} 		
 }
 

@@ -46,6 +46,7 @@ size_t POST_FEEDBACK(void *ptr, size_t size, size_t nmemb, void *stream)
 			break;
 		} 
 	}
+	printf("\n");
 	system("pause"); 
 	exit(0);
 }
@@ -67,7 +68,7 @@ void ACID_INPUT(char *acid)
 int main(void)
 {//登入函数
 	char LOGOUT[50] = "username=0&mac=&type=2&action=logout";//学长抓包分析得到的头文件
- 	char acid[8]="&acid=";
+ 	char acid[8]="&ac_id=";
  	ACID_INPUT(acid);//ACID输入
 	strcat(LOGOUT,acid);
 	CURL *curl_post;
