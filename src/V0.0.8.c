@@ -46,19 +46,32 @@ int HTTP_LOGIN(CURL *curl,CURLcode res)
 	 	exit(-1); 
 	}
 	int set=0;
+	char username[20];
+	char username_Post[50]="{SRUN3}\r\n";  
 		do
-		{
-				char username[20];
-				char username_Post[50]="{SRUN3}\r\n"; 
-		 		printf("\n----------------------------------------\n");
-				printf("\n            请输入你的用户名:           \n");
-				gets(username); 
-				for (int i = 0; i<strlen(username); ++i)
-				{//用户名输入加密 
-					username[i] = username[i] + 4;
-				}
-			 	do
-			 	{ 
+		{		
+				char LOGIN[200]="&ac_id=1&action=login&drop=0&pop=1&type=2&n=117&mbytes=0&minutes=0&mac=&username=";	
+				char *ptr=LOGIN;
+				while(*ptr!='\0')
+			 		  	ptr++;  
+				if(set==0||set==-2)
+				{//如果是第一次或者用户名输入错误要求重输则输入用户名并加密 
+			 		printf("\n----------------------------------------\n");
+					printf("\n            请输入你的用户名:           \n");
+					gets(username); 
+					for (int i = 0; i<strlen(username); ++i)
+					{//用户名输入加密 
+						username[i] = username[i] + 4;
+					}
+					strcat(username_Post,username);
+				} 
+					char *name_urlencode = curl_easy_escape(curl,username_Post,0);
+					while(*name_urlencode!='\0')
+					{
+						*ptr=*name_urlencode;
+						ptr++;
+						name_urlencode++;
+					}
 					char password[20];
 					printf("\n----------------------------------------\n");
 					printf("\n         请输入你的密码（不显示）:      \n");
@@ -81,7 +94,6 @@ int HTTP_LOGIN(CURL *curl,CURLcode res)
 							password[i] = ch;
 							i++;
 						}
-				
 					}
 					password[i] = '\0';
 					printf("\n");
@@ -103,18 +115,6 @@ int HTTP_LOGIN(CURL *curl,CURLcode res)
 							strcat(_h, _l);
 							strcat(password_encrypt, _h);
 						}
-					}
-					char LOGIN[200]="&ac_id=1&action=login&drop=0&pop=1&type=2&n=117&mbytes=0&minutes=0&mac=&username=";
-					char *ptr=LOGIN;
-					while(*ptr!='\0')
-			 		  	ptr++;  
-					strcat(username_Post,username);
-					char *name_urlencode = curl_easy_escape(curl,username_Post,0);
-					while(*name_urlencode!='\0')
-					{
-						*ptr=*name_urlencode;
-						ptr++;
-						name_urlencode++;
 					}
 					for(char *password_Post="&password=";*password_Post!='\0';password_Post++,ptr++)
 					{
@@ -231,9 +231,6 @@ int HTTP_LOGIN(CURL *curl,CURLcode res)
 							}
 					}
 				}
-				
-			}
-			while(set==-1); 
 		}
 		while(set==-2||set==-1); 
 		curl_easy_cleanup(curl);//清理
