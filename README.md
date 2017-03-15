@@ -9,11 +9,11 @@ Srun3k Client written in C for haut network authorization
 
 ----------
 
-#更新日志
+# 更新日志
 
-###仍在研究中...
+### 仍在研究中...
 
-###源码在本项目`src`目录,编译好程序在`bin`目录
+### 源码在本项目`src`目录,编译好程序在`bin`目录
 
 - `V0.0.1`版本完成了用户名和输入加密，并且进行按照官网例子进行简单post。
 
@@ -32,7 +32,7 @@ Srun3k Client written in C for haut network authorization
 
 ----------
 
-#思路图
+# 思路图
 
 这是我的思路图，也是要做出来的成品图。
 
