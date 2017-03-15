@@ -35,7 +35,7 @@ int main()
 	{//如果正常初始化
 		char username[20];
 		char username_Post[50]="{SRUN3}\r\n"; 
-		char POST_LOGIN[200]="action=login&drop=0&pop=1&type=2&n=117&mbytes=0&minutes=0&mac=&username=";
+		char POST_LOGIN[200]="&ac_id=1&action=login&drop=0&pop=1&type=2&n=117&mbytes=0&minutes=0&mac=&username=";
 		char *ptr=POST_LOGIN;
 		while(*ptr!='\0')
  		  	ptr++;  
