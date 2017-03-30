@@ -1,6 +1,28 @@
 # 校园网登陆器C语言版如何储存和读取配置文件
 
-");
+```c
+#include <stdio.h>
+//#include <curl\curl.h>
+#include <string.h>
+#include <conio.h>
+#include <stdlib.h>
+
+typedef struct login_info
+{
+	char username[20];
+	char password[20];
+	char acid;
+	char auto_login;	
+}info;
+
+int save_config_file(struct login_info *input)
+{
+	FILE *out=fopen("config.json","w+");
+	if(!out)
+	{
+		printf("\n----------------------------------------\n");
+		printf("\n		  	    文件另存失败 	  		  \n");
+		printf("\n----------------------------------------\n");
 		return -1; 
 	}
 	fprintf(out,"/**************************************\n");
