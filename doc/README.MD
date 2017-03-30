@@ -6,3 +6,4 @@
 - [如何在VS 2015中新建一个包括libcurl库的项目](https://github.com/CHN-STUDENT/srun3k-client/blob/gh-pages/doc/how_to_build_a_project_by_using_libcurl_on_vs2015.md "如何在VS 2015中新建一个包括libcurl库的项目")
 - [如何处理服务器GET和POST回传的信息](https://github.com/CHN-STUDENT/srun3k-client/blob/gh-pages/doc/how_to_handle_post_and_get_info.md "如何处理服务器GET和POST回传的信息")
 - [如何判断用户输入YES OR NO的方法](https://github.com/CHN-STUDENT/srun3k-client/blob/gh-pages/doc/How%20to%20build%20a%20function%20like%20ask%20users%20enter%20yes%20or%20no%20in%20C%20console%20program.md "如何判断用户输入YES OR NO的方法")
+- [校园网登陆器C语言版如何储存和读取配置文件](https://github.com/CHN-STUDENT/srun3k-client/blob/gh-pages/doc/How%20to%20use%20config.json.md "校园网登陆器C语言版如何储存和读取配置文件")
