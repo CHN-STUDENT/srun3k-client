@@ -3,6 +3,7 @@
 #include <string.h>
 #include <conio.h>
 #include <stdlib.h>
+#include <windows.h> 
 
 const char POSTURL[]="http://172.16.154.130:69/cgi-bin/srun_portal";  //定义POST地址
 char LOGOUT[] = "username=0&mac=&type=2&action=logout&ac_id=1";//注销发送参数 
@@ -12,32 +13,36 @@ int login_num=0;//登陆次数计数
 
 /*下面处理返回数据来自STACKOVERFLOW的例子*/ 
 
-struct string {
+struct string 
+{//接受返回数据的结构体 
   char *ptr;
   size_t len;
 };
 
-void init_string(struct string *s) {
-  s->len = 0;
-  s->ptr = malloc(s->len+1);
-  if (s->ptr == NULL) {
+void init_string(struct string *s) 
+{//处理结构体的函数 
+  s->len = 0;//先把结构体长度设置为0 
+  s->ptr = malloc(s->len+1);//动态分配长度为1的内存空间给结构体里字符数组指针ptr 
+  if (s->ptr == NULL) 
+  {//如果分配失败 
     fprintf(stderr, "\n            内存错误！            \n");
     exit(EXIT_FAILURE);
-  }
-  s->ptr[0] = '\0';
+  } 
+  s->ptr[0] = '\0';//先把第0位设置为空 
 }
 
 size_t writefunc(void *ptr, size_t size, size_t nmemb, struct string *s)
 {//处理返回数据 
-  size_t new_len = s->len + size*nmemb;
-  s->ptr = realloc(s->ptr, new_len+1);
-  if (s->ptr == NULL) {
+  size_t new_len = s->len + size*nmemb;//新长度等于=1+size*nmemb 
+  s->ptr = realloc(s->ptr, new_len+1);//动态分配内存使长度达到2+size*nmemb 
+  if (s->ptr == NULL) 
+  {//如果分配失败 
     fprintf(stderr, "\n            内存错误!            \n");
     exit(EXIT_FAILURE);
   }
-  memcpy(s->ptr+s->len, ptr, size*nmemb);
-  s->ptr[new_len] = '\0';
-  s->len = new_len;
+  memcpy(s->ptr+s->len, ptr, size*nmemb);//
+  s->ptr[new_len] = '\0';//动态分配的存储字符数组 
+  s->len = new_len;//设置结构体的里的长度等于新长度 
 
   return size*nmemb;
 }
@@ -68,10 +73,10 @@ int save_config_file(struct login_info *data)
 	fprintf(out,"**************************************/\n");
 	fprintf(out,"\n");
 	fprintf(out,"{\n");
-	fprintf(out,"#username:%s\n",data->username);
-	fprintf(out,"#password:%s\n",data->password);
-	fprintf(out,"#acid:%c\n",data->acid);
-	fprintf(out,"#auto_login:%c\n",data->auto_login);
+	fprintf(out,"#username=%s\n",data->username);
+	fprintf(out,"#password=%s\n",data->password);
+	fprintf(out,"#acid=%c\n",data->acid);
+	fprintf(out,"#auto_login=%c\n",data->auto_login);
 	fprintf(out,"}");
 	fclose(out); 
 }
@@ -91,7 +96,8 @@ int read_config_file(void)
 	if(!read)
 	{
 		printf("\n----------------------------------------\n");
-		printf("\n	    读取不到配置文件    \n"); 
+		printf("\n            读取不到配置文件            \n"); 
+		printf("\n	         请输入您的信息登陆           \n"); 
 		printf("\n----------------------------------------\n");
 		return (-1); 
 	}
@@ -100,11 +106,11 @@ int read_config_file(void)
 	{
 		fscanf(read,"%s",temp);
 		if(strcmp(temp,"{")==0)
-		{
+		{//以{为读取标识 
 			break;
 		}
 	}
-	fscanf(read,"%*10s%s",data->username);
+	fscanf(read,"%*10s%s",data->username);//扔掉前面的10位，正好扔掉#username=读 
 	fscanf(read,"%*10s%s",data->password);
 	fscanf(read,"%*6s%c",&data->acid);
 	fscanf(read,"%*12s%c",&data->auto_login);
@@ -127,19 +133,19 @@ int input_info(int state)
 		char ch;
 		unsigned int i;
 		for (i = 0; (ch = getch()) != 13; )
-		{
+		{//密码不回显输入 
 			if (ch == 8)
-			{
-				if (i == 0)
+			{//如果按下了退格键 
+				if (i == 0)//先判断是否到了密码第一位 
 					data->password[0] = '\0';
 				else
-				{
+				{//否则将它前一位变成空 
 					data->password[i - 1] = '\0';
 					i--;
 				}
 			}
 			else
-			{
+			{//否则完成本位输入并且进行下一位输入 
 				data->password[i] = ch;
 				i++;
 			}
@@ -148,18 +154,18 @@ int input_info(int state)
 		printf("\n");
 		printf("\n----------------------------------------\n");
 	} 
-	data->acid='1';
-	data->auto_login='0';
+	data->acid='1';//默认ACID=1 
+	data->auto_login='0';//默认不自动登陆 
 	if(state==-3)
 	{//ACID错误情况 
-		data->acid='2';
+		data->acid='2';//如果错误自动修改 
 	}  
 }
 
 char * login_info_handle(struct login_info *data)
-{//处理输入信息函数 
-	char *ptr=(char *)malloc(200);	
-	char *back=ptr;
+{//处理输入信息函数，完成用户名和密码加密以及urlencode 
+	char *ptr=(char *)malloc(200);//分配200位的空间形成POST参数	
+	char *back=ptr;//备份指针。因为将会用于后面循环复制信息 
 	if(!ptr)
 	{
 		printf("\n----------------------------------------\n");
@@ -168,12 +174,12 @@ char * login_info_handle(struct login_info *data)
 		system("pause"); 
 		exit(-1);
 	}
-	strcpy(ptr,"&action=login&drop=0&pop=1&type=2&n=117&mbytes=0&minutes=0&mac=&ac_id=");
-	while(*ptr!='\0')ptr++; 
-	*ptr=data->acid;
-	ptr++;
+	strcpy(ptr,"&action=login&drop=0&pop=1&type=2&n=117&mbytes=0&minutes=0&mac=&ac_id=");//POST必要参数 
+	while(*ptr!='\0')ptr++;//到达POST参数末尾 
+	*ptr=data->acid;//复制ACID信息 
+	ptr++;//进入下一位 
 	for(char *username_Post="&username=%7BSRUN3%7D%0D%0A";*username_Post!='\0';username_Post++,ptr++)
-	{
+	{//复制名字POST参数头，这里头中的符号已经urlencode过 
 		*ptr=*username_Post;
 	}
 	char temp[50]="\0";//这是用来临时存储加密后用户名和密码 
@@ -181,26 +187,26 @@ char * login_info_handle(struct login_info *data)
 	{//用户名加密 
 		temp[i] = data->username[i] + 4;
 	}
-	CURL *curl1 = curl_easy_init();
-	CURL *curl2 = curl_easy_init();
+	CURL *curl1 = curl_easy_init();//使用libcurl完成urlencode 
+	CURL *curl2 = curl_easy_init();//当时测试一个完成用户名和密码urlencode会造成程序崩溃，所以此处用了两个分别完成 
 	if(!(curl1&&curl2))
   	{//如果非正常初始化 
 	 	printf("\nLibcurl初始化失败，请重新打开本程序重试!\n");
 	 	system("pause"); 
 	 	exit(-1); 
 	}
-	char *name_urlencode = curl_easy_escape(curl1,temp,0);
+	char *name_urlencode = curl_easy_escape(curl1,temp,0);//对名字urlencode 
 	while(*name_urlencode!='\0')
-	{
+	{//复制urlencode后的名字到POST参数字符数组 
 		*ptr=*name_urlencode;
 		ptr++;
 		name_urlencode++;
 	}
-	memset(temp,0,sizeof(temp));
+	memset(temp,0,sizeof(temp));//将temp字符数组重置 
 	char key[] = "1234567890";//加密key
 	int i;
 	for (i = 0; i<strlen(data->password); ++i)
-	{
+	{//这是密码加密函数 
 		int ki = data->password[i] ^ key[strlen(key) - i%strlen(key) - 1];
 		char _l[4] = { (char)((ki & 0x0f) + 0x36) };
 		char _h[4] = { (char)((ki >> 4 & 0x0f) + 0x63) };
@@ -226,10 +232,10 @@ char * login_info_handle(struct login_info *data)
 		ptr++;
 		password_urlencode++;
 	}
-	*ptr='\0'; 
+	*ptr='\0';//设置字符数组结束位 
 	curl_easy_cleanup(curl1);//清理
 	curl_easy_cleanup(curl2);//清理
-	return back;
+	return back;//返回它的首地址 
 }
 
 void read_or_input(int state)
@@ -243,11 +249,11 @@ void read_or_input(int state)
 	{//自动读取配置文件存在
 		file=1;
 		if(data->auto_login=='1'&&login_num==0)
-   			{
-   				printf("\n----------------------------------------\n");
-				printf("\n      检测到配置文件，自动登陆中!       \n"); 
-				printf("\n----------------------------------------\n");
-			}
+		{//第一次存在配置文件登陆显示 
+			printf("\n----------------------------------------\n");
+			printf("\n      检测到配置文件，自动登陆中!       \n"); 
+			printf("\n----------------------------------------\n");
+		}
 		if(data->auto_login=='0'&&login_num==0)
 		{
 			printf("\n----------------------------------------\n");
@@ -385,12 +391,14 @@ int HTTP_GET_INFO(void)
 	(char *)s.ptr;
 	if(*s.ptr=='n')
 	{//如果未登陆 
+		printf("\n----------------------------------------\n");
 		printf("\n              您不在线                  \n");
 		printf("\n----------------------------------------\n");
 		return 0;
 	}
 	else
 		{//如果已登录 
+			printf("\n----------------------------------------\n");
 			printf("\n       您已在线，下面是您的信息:        \n");
 			printf("\n----------------------------------------\n");
 			char *j=(char *)s.ptr;
@@ -422,21 +430,22 @@ int HTTP_GET_INFO(void)
 			printf("\n----------------------------------------\n");
 			return 1;
 		} 
+	free(s.ptr);
 	curl_easy_cleanup(curl);//清理
 }
 
 int HTTP_POST(char *back,int mode) 
 {//发送登陆或者注销函数， mode模式：0.注销，1.登陆 
 	CURL *curl= curl_easy_init();
-	CURLcode res;
 	if(!(curl))
   	{//如果非正常初始化 
 	 	printf("\nLibcurl初始化失败，请重新打开本程序重试!\n");
 	 	system("pause"); 
 	 	exit(-1); 
 	}
-	struct string feedback;
-    init_string(&feedback);
+	CURLcode res;
+	struct string s;
+    init_string(&s);
 	curl_easy_setopt(curl, CURLOPT_URL, POSTURL); //设置POST地址
 	if(mode==0)
 		curl_easy_setopt(curl, CURLOPT_POSTFIELDS,LOGOUT);//设置POST参数
@@ -444,83 +453,88 @@ int HTTP_POST(char *back,int mode)
 		curl_easy_setopt(curl, CURLOPT_POSTFIELDS,back);
 	curl_easy_setopt(curl,CURLOPT_TIMEOUT,1L);//超时设置成1s
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writefunc);
-    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &feedback); 
-	res = curl_easy_perform(curl);//启动libcurl 
-	if (res != CURLE_OK)
-	{
-		printf("\n----------------------------------------\n");
-		printf("\n              *** 错误: ***             \n");
-		printf("\n  无法获取您的信息,请检查您的网络连接!  \n");
-		printf("\n----------------------------------------\n");
-		char input;
-		while(1)
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &s); 
+	while(1)
+    {
+		res = curl_easy_perform(curl);//启动libcurl 
+		if (res != CURLE_OK)
 		{
-			printf("\n     您是否要重试？<1.重试/2.退出>:     \n");
-			char input=getch();
-			if(input=='1')
-			{ 
-			   	break;
-			}
-		   	if(input=='2')
-		   		exit (0);
-		   	else
+			printf("\n----------------------------------------\n");
+			printf("\n              *** 错误: ***             \n");
+			printf("\n  无法获取您的信息,请检查您的网络连接!  \n");
+			printf("\n----------------------------------------\n");
+			char input;
+			while(1)
 			{
-				printf("\n----------------------------------------\n");
-				printf("\n             输入错误请重试!            \n"); 
-				printf("\n----------------------------------------\n");
+				printf("\n     您是否要重试？<1.重试/2.退出>:     \n");
+				char input=getch();
+				if(input=='1')
+				{ 
+				   	break;
+				}
+			   	if(input=='2')
+			   		exit (0);
+			   	else
+				{
+					printf("\n----------------------------------------\n");
+					printf("\n             输入错误请重试!            \n"); 
+					printf("\n----------------------------------------\n");
+				}
 			}
 		}
+		if(res == CURLE_OK)
+			break;
 	}
-	char *k=(char*)feedback.ptr;
 	printf("\n----------------------------------------\n");
 	printf("\n----------------------------------------\n");
 	printf("\n           服务器反馈信息:              \n");
 	printf("\n----------------------------------------\n");
-	for(;*k!='\0';k++) 
+	(char *)s.ptr;
+	for(;*s.ptr!='\0';s.ptr++) 
 	{
-		if(*k=='Y'&&*(k+1)=='o')
+		if(*s.ptr=='Y'&&*(s.ptr+1)=='o')
 		{//不在线情况 
 			printf("\n         您不在线，登出失败         \n");
 			printf("\n----------------------------------------\n");
 			return 0; 
 			break;
 		} 
-		else if(*k=='t'&&*(k+2)=='o')
+		else if(*s.ptr=='t'&&*(s.ptr+2)=='o')
 		{//注销成功情况
 			printf("\n              注销成功              \n");
 			printf("\n----------------------------------------\n");
 			return 0;
 			break;
 		}
-		else if(*k=='n'&&*(k+2)=='o')
+		else if(*s.ptr=='n'&&*(s.ptr+2)=='o')
 		{//登陆成功情况
 			printf("\n              登陆成功              \n");
 			printf("\n----------------------------------------\n");
 			return 1;
 			break;
 		} 
-		else if(*k=='P'&&*(k+1)=='a') 
+		else if(*s.ptr=='P'&&*(s.ptr+1)=='a') 
 		{//密码错误情况
 			printf("\n        密码错误，请检查输入。      \n");
 			printf("\n----------------------------------------\n");
 			return -1;
 			break;
 		} 
-		else if(*k=='U'&&*(k+1)=='s')
+		else if(*s.ptr=='U'&&*(s.ptr+1)=='s')
 		{//用户名错误情况
 			printf("\n      用户名不存在，请检查输入。    \n");
 			printf("\n----------------------------------------\n");
 			return -2;
 			break;
 		} 
-		else if(*k=='I'&&*(k+1)=='N') 
+		else if(*s.ptr=='I'&&*(s.ptr+1)=='N') 
 		{//ACID错误情况
 			printf("\n              ACID错误              \n");
 			printf("\n----------------------------------------\n");
 			return -3;
 			break;
 		}
-		else if(*k=='m')
+		else if(*s.ptr=='m')
 		{//参数错误情况 
 			printf("\n              缺少参数              \n");
 			printf("\n----------------------------------------\n");
@@ -528,13 +542,15 @@ int HTTP_POST(char *back,int mode)
 		} 
 	}
 	printf("\n----------------------------------------\n");	
+	free(s.ptr);
+	curl_easy_cleanup(curl);
 }
  
 void LOGIN(int state,int file)
-{
+{//登陆函数 
 	read_or_input(state);//自动读取配置文件或者要求输入 
 	while(state!=1)
-	{
+	{//如果登陆不成功 
 		state=HTTP_POST(login_info_handle(data),1);//实现加密并且发包登陆 
 		if(state==1)
 			break;
@@ -548,7 +564,6 @@ void LOGIN(int state,int file)
    			if(input=='1')
    			{ 
    				input_info(state);//如果信息有误，要求重新输入
-   				state=HTTP_POST(login_info_handle(data),1);
    				break;
    			}
 			if(input=='2')
@@ -570,16 +585,18 @@ void LOGIN(int state,int file)
  
 int main(void)
 {
+	system("title 校园网登陆器C语言版 V0.0.9");
 	system("mode con cols=40");//设置宽度40
 	system("color A");//字体设置为绿色 
-	int state=0;
+	int state=0;//用户状态变量，1为登陆，0为未登录，-1密码错误，-2用户名错误，-3ACID错误 
 	PRINT_WELCOME_INFO();
 	state=HTTP_GET_INFO();//HTTP-GET得到用户信息
    	if(state==0)
    	{//未登录  
    		LOGIN(state,file);
+   		state=HTTP_GET_INFO();
    	} 
-   	if(state==1)
+   	else if(state==1)
    	{//已登录 
 		printf("\n----------------------------------------\n");
 		printf("\n      你是否现在注销:<1.是/2.退出>      \n"); 
@@ -602,7 +619,7 @@ int main(void)
 			}
 		}
    		if(state==0)
-   		{
+   		{//注销后重登陆 
    			printf("\n----------------------------------------\n");
 			printf("\n      你是否现在重登陆:<1.是/2.退出>    \n"); 
 			printf("\n----------------------------------------\n");
@@ -625,6 +642,10 @@ int main(void)
 			}
 		}
 	} 
+	printf("\n----------------------------------------\n");
+	printf("\n  感谢您的使用，欢迎给我提供改进建议！  \n"); 
+	printf("\n----------------------------------------\n");
 	system("pause"); 
+	free(data);
 	return 0;
 }
