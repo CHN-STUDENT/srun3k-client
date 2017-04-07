@@ -27,6 +27,8 @@ Srun3k Client written in C for haut network authorization
 
 - `V0.0.6`仍存在问题。
 
+### 以上版本测试不成功，无法使用，只备份参考用！
+
 - `V0.0.7-V0.0.8`改进测试成功。
 
 - `V0.0.9`加入存取配置文件的功能成功，继续研究中。
