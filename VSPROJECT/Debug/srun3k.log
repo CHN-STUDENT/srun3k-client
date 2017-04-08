@@ -1,0 +1,57 @@
+﻿  stdafx.cpp
+  srun3k.cpp
+c:\users\mr.guo\desktop\srun3k\srun3k.cpp(91): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\conio.h(452): note: 参见“getch”的声明
+c:\users\mr.guo\desktop\srun3k\srun3k.cpp(87): warning C4101: “input”: 未引用的局部变量
+c:\users\mr.guo\desktop\srun3k\srun3k.cpp(201): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\conio.h(452): note: 参见“getch”的声明
+c:\users\mr.guo\desktop\srun3k\srun3k.cpp(197): warning C4101: “input”: 未引用的局部变量
+c:\users\mr.guo\desktop\srun3k\srun3k.cpp(294): warning C4018: “<”: 有符号/无符号不匹配
+c:\users\mr.guo\desktop\srun3k\srun3k.cpp(316): warning C4018: “<”: 有符号/无符号不匹配
+c:\users\mr.guo\desktop\srun3k\srun3k.cpp(285): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\string.h(119): note: 参见“strcpy”的声明
+c:\users\mr.guo\desktop\srun3k\srun3k.cpp(323): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\string.h(90): note: 参见“strcat”的声明
+c:\users\mr.guo\desktop\srun3k\srun3k.cpp(324): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\string.h(90): note: 参见“strcat”的声明
+c:\users\mr.guo\desktop\srun3k\srun3k.cpp(328): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\string.h(90): note: 参见“strcat”的声明
+c:\users\mr.guo\desktop\srun3k\srun3k.cpp(329): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\string.h(90): note: 参见“strcat”的声明
+c:\users\mr.guo\desktop\srun3k\srun3k.cpp(360): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(205): note: 参见“fopen”的声明
+c:\users\mr.guo\desktop\srun3k\srun3k.cpp(367): warning C4996: 'fscanf': This function or variable may be unsafe. Consider using fscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(1193): note: 参见“fscanf”的声明
+c:\users\mr.guo\desktop\srun3k\srun3k.cpp(373): warning C4996: 'fscanf': This function or variable may be unsafe. Consider using fscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(1193): note: 参见“fscanf”的声明
+c:\users\mr.guo\desktop\srun3k\srun3k.cpp(374): warning C4996: 'fscanf': This function or variable may be unsafe. Consider using fscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(1193): note: 参见“fscanf”的声明
+c:\users\mr.guo\desktop\srun3k\srun3k.cpp(375): warning C4996: 'fscanf': This function or variable may be unsafe. Consider using fscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(1193): note: 参见“fscanf”的声明
+c:\users\mr.guo\desktop\srun3k\srun3k.cpp(376): warning C4996: 'fscanf': This function or variable may be unsafe. Consider using fscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(1193): note: 参见“fscanf”的声明
+c:\users\mr.guo\desktop\srun3k\srun3k.cpp(392): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\conio.h(452): note: 参见“getch”的声明
+c:\users\mr.guo\desktop\srun3k\srun3k.cpp(431): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\conio.h(452): note: 参见“getch”的声明
+c:\users\mr.guo\desktop\srun3k\srun3k.cpp(475): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\conio.h(452): note: 参见“getch”的声明
+c:\users\mr.guo\desktop\srun3k\srun3k.cpp(500): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\conio.h(452): note: 参见“getch”的声明
+c:\users\mr.guo\desktop\srun3k\srun3k.cpp(508): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\conio.h(452): note: 参见“getch”的声明
+c:\users\mr.guo\desktop\srun3k\srun3k.cpp(526): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(205): note: 参见“fopen”的声明
+c:\users\mr.guo\desktop\srun3k\srun3k.cpp(581): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\conio.h(452): note: 参见“getch”的声明
+c:\users\mr.guo\desktop\srun3k\srun3k.cpp(603): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\conio.h(452): note: 参见“getch”的声明
+  正在生成代码...
+c:\users\mr.guo\desktop\srun3k\srun3k.cpp(558): warning C4715: “LOGIN”: 不是所有的控件路径都返回值
+srun3k.obj : error LNK2019: 无法解析的外部符号 __imp__curl_easy_escape，该符号在函数 "char * __cdecl LOGIN_INFO_HANDLE(struct login_info *)" (?LOGIN_INFO_HANDLE@@YAPADPAUlogin_info@@@Z) 中被引用
+srun3k.obj : error LNK2019: 无法解析的外部符号 __imp__curl_easy_init，该符号在函数 "void __cdecl HTTP_GET_INFO(int *)" (?HTTP_GET_INFO@@YAXPAH@Z) 中被引用
+srun3k.obj : error LNK2019: 无法解析的外部符号 __imp__curl_easy_setopt，该符号在函数 "void __cdecl HTTP_GET_INFO(int *)" (?HTTP_GET_INFO@@YAXPAH@Z) 中被引用
+srun3k.obj : error LNK2019: 无法解析的外部符号 __imp__curl_easy_perform，该符号在函数 "void __cdecl HTTP_GET_INFO(int *)" (?HTTP_GET_INFO@@YAXPAH@Z) 中被引用
+srun3k.obj : error LNK2019: 无法解析的外部符号 __imp__curl_easy_cleanup，该符号在函数 "void __cdecl HTTP_GET_INFO(int *)" (?HTTP_GET_INFO@@YAXPAH@Z) 中被引用
+libcurl\lib\libcurl_a.lib : warning LNK4272: 库计算机类型“x64”与目标计算机类型“X86”冲突
+C:\Users\MR.Guo\Desktop\srun3k\Debug\srun3k.exe : fatal error LNK1120: 5 个无法解析的外部命令
