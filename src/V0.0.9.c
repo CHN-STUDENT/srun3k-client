@@ -4,49 +4,49 @@
 #include <conio.h>
 #include <stdlib.h>
 
-const char POSTURL[]="http://172.16.154.130:69/cgi-bin/srun_portal";  //¶¨ÒåPOSTµØÖ·
-char *LOGOUT = "username=0&mac=&type=2&action=logout&ac_id=1";//×¢Ïú·¢ËÍ²ÎÊı 
+const char POSTURL[]="http://172.16.154.130:69/cgi-bin/srun_portal";  //å®šä¹‰POSTåœ°å€
+char *LOGOUT = "username=0&mac=&type=3&action=logout&ac_id=1";//æ³¨é”€å‘é€å‚æ•° 
 
-/*ÏÂÃæ´¦Àí·µ»ØÊı¾İÀ´×ÔSTACKOVERFLOWµÄÀı×Ó*/ 
+/*ä¸‹é¢å¤„ç†è¿”å›æ•°æ®æ¥è‡ªSTACKOVERFLOWçš„ä¾‹å­*/ 
 
 struct string 
-{//½ÓÊÜ·µ»ØÊı¾İµÄ½á¹¹Ìå 
+{//æ¥å—è¿”å›æ•°æ®çš„ç»“æ„ä½“ 
   char *ptr;
   size_t len;
 };
 
 void init_string(struct string *s) 
-{//´¦Àí½á¹¹ÌåµÄº¯Êı 
-  s->len = 0;//ÏÈ°Ñ½á¹¹Ìå³¤¶ÈÉèÖÃÎª0 
-  s->ptr = malloc(s->len+1);//¶¯Ì¬·ÖÅä³¤¶ÈÎª1µÄÄÚ´æ¿Õ¼ä¸ø½á¹¹ÌåÀï×Ö·ûÊı×éÖ¸Õëptr 
+{//å¤„ç†ç»“æ„ä½“çš„å‡½æ•° 
+  s->len = 0;//å…ˆæŠŠç»“æ„ä½“é•¿åº¦è®¾ç½®ä¸º0 
+  s->ptr = malloc(s->len+1);//åŠ¨æ€åˆ†é…é•¿åº¦ä¸º1çš„å†…å­˜ç©ºé—´ç»™ç»“æ„ä½“é‡Œå­—ç¬¦æ•°ç»„æŒ‡é’ˆptr 
   if (s->ptr == NULL) 
-  {//Èç¹û·ÖÅäÊ§°Ü 
-    fprintf(stderr, "\n            ÄÚ´æ´íÎó£¡            \n");
+  {//å¦‚æœåˆ†é…å¤±è´¥ 
+    fprintf(stderr, "\n            å†…å­˜é”™è¯¯ï¼            \n");
     exit(EXIT_FAILURE);
   } 
-  s->ptr[0] = '\0';//ÏÈ°ÑµÚ0Î»ÉèÖÃÎª¿Õ 
+  s->ptr[0] = '\0';//å…ˆæŠŠç¬¬0ä½è®¾ç½®ä¸ºç©º 
 }
 
 size_t writefunc(void *ptr, size_t size, size_t nmemb, struct string *s)
-{//´¦Àí·µ»ØÊı¾İ 
-  size_t new_len = s->len + size*nmemb;//ĞÂ³¤¶ÈµÈÓÚ=1+size*nmemb 
-  s->ptr = realloc(s->ptr, new_len+1);//¶¯Ì¬·ÖÅäÄÚ´æÊ¹³¤¶È´ïµ½2+size*nmemb 
+{//å¤„ç†è¿”å›æ•°æ® 
+  size_t new_len = s->len + size*nmemb;//æ–°é•¿åº¦ç­‰äº=1+size*nmemb 
+  s->ptr = realloc(s->ptr, new_len+1);//åŠ¨æ€åˆ†é…å†…å­˜ä½¿é•¿åº¦è¾¾åˆ°2+size*nmemb 
   if (s->ptr == NULL) 
-  {//Èç¹û·ÖÅäÊ§°Ü 
-    fprintf(stderr, "\n            ÄÚ´æ´íÎó!            \n");
+  {//å¦‚æœåˆ†é…å¤±è´¥ 
+    fprintf(stderr, "\n            å†…å­˜é”™è¯¯!            \n");
     exit(EXIT_FAILURE);
   }
   memcpy(s->ptr+s->len, ptr, size*nmemb);//
-  s->ptr[new_len] = '\0';//¶¯Ì¬·ÖÅäµÄ´æ´¢×Ö·ûÊı×é 
-  s->len = new_len;//ÉèÖÃ½á¹¹ÌåµÄÀïµÄ³¤¶ÈµÈÓÚĞÂ³¤¶È 
+  s->ptr[new_len] = '\0';//åŠ¨æ€åˆ†é…çš„å­˜å‚¨å­—ç¬¦æ•°ç»„ 
+  s->len = new_len;//è®¾ç½®ç»“æ„ä½“çš„é‡Œçš„é•¿åº¦ç­‰äºæ–°é•¿åº¦ 
 
   return size*nmemb;
 }
 
-/*ÉÏÃæ´¦Àí·µ»ØÊı¾İÀ´×ÔSTACKOVERFLOWµÄÀı×Ó*/ 
+/*ä¸Šé¢å¤„ç†è¿”å›æ•°æ®æ¥è‡ªSTACKOVERFLOWçš„ä¾‹å­*/ 
 
 typedef struct login_info
-{//µÇÂ½Êı¾İ½á¹¹Ìå 
+{//ç™»é™†æ•°æ®ç»“æ„ä½“ 
 	char username[20];
 	char password[20];
 	char acid; 
@@ -54,35 +54,35 @@ typedef struct login_info
 }info;
 
 void HTTP_POST(char * post,int * state) 
-{//·¢ËÍµÇÂ½»òÕß×¢Ïúº¯Êı 
+{//å‘é€ç™»é™†æˆ–è€…æ³¨é”€å‡½æ•° 
 	CURL *curl= curl_easy_init();
 	if(!(curl))
-  	{//Èç¹û·ÇÕı³£³õÊ¼»¯ 
-	 	printf("\nLibcurl³õÊ¼»¯Ê§°Ü£¬ÇëÖØĞÂ´ò¿ª±¾³ÌĞòÖØÊÔ!\n");
+  	{//å¦‚æœéæ­£å¸¸åˆå§‹åŒ– 
+	 	printf("\nLibcurlåˆå§‹åŒ–å¤±è´¥ï¼Œè¯·é‡æ–°æ‰“å¼€æœ¬ç¨‹åºé‡è¯•!\n");
 	 	system("pause"); 
 	 	exit(-1); 
 	}
 	CURLcode res;
 	struct string s;
     init_string(&s);
-	curl_easy_setopt(curl, CURLOPT_URL, POSTURL); //ÉèÖÃPOSTµØÖ·
-	curl_easy_setopt(curl, CURLOPT_POSTFIELDS,post);//ÉèÖÃPOST²ÎÊı
-	curl_easy_setopt(curl,CURLOPT_TIMEOUT,1L);//³¬Ê±ÉèÖÃ³É1s
+	curl_easy_setopt(curl, CURLOPT_URL, POSTURL); //è®¾ç½®POSTåœ°å€
+	curl_easy_setopt(curl, CURLOPT_POSTFIELDS,post);//è®¾ç½®POSTå‚æ•°
+	curl_easy_setopt(curl,CURLOPT_TIMEOUT,1L);//è¶…æ—¶è®¾ç½®æˆ1s
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writefunc);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &s); 
 	while(1)
     {
-		res = curl_easy_perform(curl);//Æô¶¯libcurl 
+		res = curl_easy_perform(curl);//å¯åŠ¨libcurl 
 		if (res != CURLE_OK)
 		{
 			printf("\n----------------------------------------\n");
-			printf("\n              *** ´íÎó: ***             \n");
-			printf("\n  ÎŞ·¨»ñÈ¡ÄúµÄĞÅÏ¢,Çë¼ì²éÄúµÄÍøÂçÁ¬½Ó!  \n");
+			printf("\n              *** é”™è¯¯: ***             \n");
+			printf("\n  æ— æ³•è·å–æ‚¨çš„ä¿¡æ¯,è¯·æ£€æŸ¥æ‚¨çš„ç½‘ç»œè¿æ¥!  \n");
 			printf("\n----------------------------------------\n");
 			char input;
 			while(1)
 			{
-				printf("\n     ÄúÊÇ·ñÒªÖØÊÔ£¿<1.ÖØÊÔ/2.ÍË³ö>:     \n");
+				printf("\n     æ‚¨æ˜¯å¦è¦é‡è¯•ï¼Ÿ<1.é‡è¯•/2.é€€å‡º>:     \n");
 				char input=getch();
 				if(input=='1')
 				{ 
@@ -93,7 +93,7 @@ void HTTP_POST(char * post,int * state)
 			   	else
 				{
 					printf("\n----------------------------------------\n");
-					printf("\n             ÊäÈë´íÎóÇëÖØÊÔ!            \n"); 
+					printf("\n             è¾“å…¥é”™è¯¯è¯·é‡è¯•!            \n"); 
 					printf("\n----------------------------------------\n");
 				}
 			}
@@ -103,56 +103,56 @@ void HTTP_POST(char * post,int * state)
 	}
 	printf("\n----------------------------------------\n");
 	printf("\n----------------------------------------\n");
-	printf("\n           ·şÎñÆ÷·´À¡ĞÅÏ¢:              \n");
+	printf("\n           æœåŠ¡å™¨åé¦ˆä¿¡æ¯:              \n");
 	printf("\n----------------------------------------\n");
 	(char *)s.ptr;
 	for(;*s.ptr!='\0';s.ptr++) 
 	{
 		if(*s.ptr=='Y'&&*(s.ptr+1)=='o')
-		{//²»ÔÚÏßÇé¿ö 
-			printf("\n         Äú²»ÔÚÏß£¬µÇ³öÊ§°Ü         \n");
+		{//ä¸åœ¨çº¿æƒ…å†µ 
+			printf("\n         æ‚¨ä¸åœ¨çº¿ï¼Œç™»å‡ºå¤±è´¥         \n");
 			printf("\n----------------------------------------\n");
 			*state=0; 
 			break;
 		} 
 		else if(*s.ptr=='t'&&*(s.ptr+2)=='o')
-		{//×¢Ïú³É¹¦Çé¿ö
-			printf("\n              ×¢Ïú³É¹¦              \n");
+		{//æ³¨é”€æˆåŠŸæƒ…å†µ
+			printf("\n              æ³¨é”€æˆåŠŸ              \n");
 			printf("\n----------------------------------------\n");
 			*state=0; 
 			break;
 		}
 		else if(*s.ptr=='n'&&*(s.ptr+2)=='o')
-		{//µÇÂ½³É¹¦Çé¿ö
-			printf("\n              µÇÂ½³É¹¦              \n");
+		{//ç™»é™†æˆåŠŸæƒ…å†µ
+			printf("\n              ç™»é™†æˆåŠŸ              \n");
 			printf("\n----------------------------------------\n");
 			*state=1; 
 			break;
 		} 
 		else if(*s.ptr=='P'&&*(s.ptr+1)=='a') 
-		{//ÃÜÂë´íÎóÇé¿ö
-			printf("\n        ÃÜÂë´íÎó£¬Çë¼ì²éÊäÈë¡£      \n");
+		{//å¯†ç é”™è¯¯æƒ…å†µ
+			printf("\n        å¯†ç é”™è¯¯ï¼Œè¯·æ£€æŸ¥è¾“å…¥ã€‚      \n");
 			printf("\n----------------------------------------\n");
 			*state=-1; 
 			break;
 		} 
 		else if(*s.ptr=='U'&&*(s.ptr+1)=='s')
-		{//ÓÃ»§Ãû´íÎóÇé¿ö
-			printf("\n      ÓÃ»§Ãû²»´æÔÚ£¬Çë¼ì²éÊäÈë¡£    \n");
+		{//ç”¨æˆ·åé”™è¯¯æƒ…å†µ
+			printf("\n      ç”¨æˆ·åä¸å­˜åœ¨ï¼Œè¯·æ£€æŸ¥è¾“å…¥ã€‚    \n");
 			printf("\n----------------------------------------\n");
 			*state=-2; 
 			break;
 		} 
 		else if(*s.ptr=='I'&&*(s.ptr+1)=='N') 
-		{//ACID´íÎóÇé¿ö
-			printf("\n              ACID´íÎó              \n");
+		{//ACIDé”™è¯¯æƒ…å†µ
+			printf("\n              ACIDé”™è¯¯              \n");
 			printf("\n----------------------------------------\n");
 			*state=-3; 
 			break;
 		}
 		else if(*s.ptr=='m')
-		{//²ÎÊı´íÎóÇé¿ö 
-			printf("\n              È±ÉÙ²ÎÊı              \n");
+		{//å‚æ•°é”™è¯¯æƒ…å†µ 
+			printf("\n              ç¼ºå°‘å‚æ•°              \n");
 			printf("\n----------------------------------------\n");
 			break;
 		} 
@@ -162,37 +162,37 @@ void HTTP_POST(char * post,int * state)
 }
 
 void HTTP_GET_INFO(int * state)
-{//»ñÈ¡µ±Ç°µÇÂ½×´Ì¬º¯Êı   
+{//è·å–å½“å‰ç™»é™†çŠ¶æ€å‡½æ•°   
 	CURL *curl= curl_easy_init();
 	if(!(curl))
-  	{//Èç¹û·ÇÕı³£³õÊ¼»¯ 
-	 	printf("\nLibcurl³õÊ¼»¯Ê§°Ü£¬ÇëÖØĞÂ´ò¿ª±¾³ÌĞòÖØÊÔ!\n");
+  	{//å¦‚æœéæ­£å¸¸åˆå§‹åŒ– 
+	 	printf("\nLibcurlåˆå§‹åŒ–å¤±è´¥ï¼Œè¯·é‡æ–°æ‰“å¼€æœ¬ç¨‹åºé‡è¯•!\n");
 	 	system("pause"); 
 	 	exit(-1); 
 	}
 	CURLcode res;
 	printf("\n----------------------------------------\n");
-	printf("\n-------ÕıÔÚ»ñÈ¡ÄúµÄĞÅÏ¢£¬ÇëÉÔºó:--------\n"); 
+	printf("\n-------æ­£åœ¨è·å–æ‚¨çš„ä¿¡æ¯ï¼Œè¯·ç¨å:--------\n"); 
 	struct string s;
     init_string(&s);
-	const char GET_INFO_URL[]="http://172.16.154.130/cgi-bin/rad_user_info";//¶¨Òå»ñÈ¡µÇÂ½×´Ì¬º¯Êı
-	curl_easy_setopt(curl,CURLOPT_URL,GET_INFO_URL);//ÉèÖÃµÃµ½ÓÃ»§ĞÅÏ¢µÄGETµØÖ·
+	const char GET_INFO_URL[]="http://172.16.154.130/cgi-bin/rad_user_info";//å®šä¹‰è·å–ç™»é™†çŠ¶æ€å‡½æ•°
+	curl_easy_setopt(curl,CURLOPT_URL,GET_INFO_URL);//è®¾ç½®å¾—åˆ°ç”¨æˆ·ä¿¡æ¯çš„GETåœ°å€
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writefunc);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &s);
-	curl_easy_setopt(curl,CURLOPT_TIMEOUT,1L);//³¬Ê±ÉèÖÃ³É1s
+	curl_easy_setopt(curl,CURLOPT_TIMEOUT,1L);//è¶…æ—¶è®¾ç½®æˆ1s
     while(1)
     {
-		res = curl_easy_perform(curl);//Æô¶¯libcurl 
+		res = curl_easy_perform(curl);//å¯åŠ¨libcurl 
 		if (res != CURLE_OK)
 		{
 			printf("\n----------------------------------------\n");
-			printf("\n              *** ´íÎó: ***             \n");
-			printf("\n  ÎŞ·¨»ñÈ¡ÄúµÄĞÅÏ¢,Çë¼ì²éÄúµÄÍøÂçÁ¬½Ó!  \n");
+			printf("\n              *** é”™è¯¯: ***             \n");
+			printf("\n  æ— æ³•è·å–æ‚¨çš„ä¿¡æ¯,è¯·æ£€æŸ¥æ‚¨çš„ç½‘ç»œè¿æ¥!  \n");
 			printf("\n----------------------------------------\n");
 			char input;
 			while(1)
 			{
-				printf("\n     ÄúÊÇ·ñÒªÖØÊÔ£¿<1.ÖØÊÔ/2.ÍË³ö>:     \n");
+				printf("\n     æ‚¨æ˜¯å¦è¦é‡è¯•ï¼Ÿ<1.é‡è¯•/2.é€€å‡º>:     \n");
 				char input=getch();
 				if(input=='1')
 				{ 
@@ -203,7 +203,7 @@ void HTTP_GET_INFO(int * state)
 			   	else
 				{
 					printf("\n----------------------------------------\n");
-					printf("\n             ÊäÈë´íÎóÇëÖØÊÔ!            \n"); 
+					printf("\n             è¾“å…¥é”™è¯¯è¯·é‡è¯•!            \n"); 
 					printf("\n----------------------------------------\n");
 				}
 			}
@@ -213,37 +213,37 @@ void HTTP_GET_INFO(int * state)
 	}
 	(char *)s.ptr;
 	if(*s.ptr=='n')
-	{//Èç¹ûÎ´µÇÂ½ 
+	{//å¦‚æœæœªç™»é™† 
 		printf("\n----------------------------------------\n");
-		printf("\n                Äú²»ÔÚÏß£¡              \n");
+		printf("\n                æ‚¨ä¸åœ¨çº¿ï¼              \n");
 		printf("\n----------------------------------------\n");
 		*state=0;
 	}
 	else
-	{//Èç¹ûÒÑµÇÂ¼ 
+	{//å¦‚æœå·²ç™»å½• 
 		printf("\n----------------------------------------\n");
-		printf("\n       ÄúÒÑÔÚÏß£¬ÏÂÃæÊÇÄúµÄĞÅÏ¢:        \n");
+		printf("\n       æ‚¨å·²åœ¨çº¿ï¼Œä¸‹é¢æ˜¯æ‚¨çš„ä¿¡æ¯:        \n");
 		printf("\n----------------------------------------\n");
 		char *j=(char *)s.ptr;
-		for(int flag=0;;s.ptr++)//¿ªÊ¼Ñ­»·Ö±µ½Êı¾İÄ©Î² 
+		for(int flag=0;;s.ptr++)//å¼€å§‹å¾ªç¯ç›´åˆ°æ•°æ®æœ«å°¾ 
 			{
-				char temp[20]; //¶¨ÒåÒ»¸öÁÙÊ±±äÁ¿
-				if(*s.ptr==',')//Èç¹ûµ±Ç°Î»Îª,·Ö¸ô·û 
+				char temp[20]; //å®šä¹‰ä¸€ä¸ªä¸´æ—¶å˜é‡
+				if(*s.ptr==',')//å¦‚æœå½“å‰ä½ä¸º,åˆ†éš”ç¬¦ 
 				{	
-					flag++;//,·Ö¸ô·û¼ÆÊı 
-					char *t=temp;//¶¨ÒåÒ»¸öÁÙÊ±Ö¸ÕëÖ¸Ïòt
+					flag++;//,åˆ†éš”ç¬¦è®¡æ•° 
+					char *t=temp;//å®šä¹‰ä¸€ä¸ªä¸´æ—¶æŒ‡é’ˆæŒ‡å‘t
 					for(;*j!=*s.ptr;j++,t++)
 						*t=*j; 
 					*t='\0';
 					if(flag==1)
-						printf("\nÄúµÄµÇÈëÓÃ»§ÃûÊÇ: %s\n",temp);
+						printf("\næ‚¨çš„ç™»å…¥ç”¨æˆ·åæ˜¯: %s\n",temp);
 					if(flag==7)
-						printf("\nÄúÕâ¸öÔÂËùÓÃÁ÷Á¿: %f GB\n",1.0*atof(temp)/1073741824);//atof(string)×ª¸¡µã 
+						printf("\næ‚¨è¿™ä¸ªæœˆæ‰€ç”¨æµé‡: %f GB\n",1.0*atof(temp)/1073741824);//atof(string)è½¬æµ®ç‚¹ 
 					if(flag==8)
-						printf("\nÄúÕâ¸öÔÂËùÓÃÊ±¼ä: %03dĞ¡Ê±%02d·ÖÖÓ%02dÃë\n",atoi(temp)/3600,atoi(temp)/60%60,atoi(temp)%60); //atoi(string)×ªÕûÊı 
+						printf("\næ‚¨è¿™ä¸ªæœˆæ‰€ç”¨æ—¶é—´: %03då°æ—¶%02dåˆ†é’Ÿ%02dç§’\n",atoi(temp)/3600,atoi(temp)/60%60,atoi(temp)%60); //atoi(string)è½¬æ•´æ•° 
 					if(flag==9)
 					{
-						printf("\nÄú µÄ µÇ Èë  IP : %s\n",temp);
+						printf("\næ‚¨ çš„ ç™» å…¥  IP : %s\n",temp);
 						break;
 					}
 					j++; 
@@ -253,63 +253,63 @@ void HTTP_GET_INFO(int * state)
 		printf("\n----------------------------------------\n");
 		*state=1;
 	} 
-	curl_easy_cleanup(curl);//ÇåÀí
+	curl_easy_cleanup(curl);//æ¸…ç†
 }
 
 void PRINT_WELCOME_INFO(void)
-{//Êä³ö»¶Ó­ĞÅÏ¢
+{//è¾“å‡ºæ¬¢è¿ä¿¡æ¯
 	printf("\n----------------------------------------\n");
-	printf("      »¶Ó­Ê¹ÓÃĞ£Ô°ÍøµÇÂ½Æ÷ C ÓïÑÔ°æ     \n");	
+	printf("      æ¬¢è¿ä½¿ç”¨æ ¡å›­ç½‘ç™»é™†å™¨ C è¯­è¨€ç‰ˆ     \n");	
 	printf("Made By CHN-STUDENT & MouYouLing V0.0.9\n");
 	printf("\n----------------------------------------\n");
 }
 
 
 char * LOGIN_INFO_HANDLE(struct login_info *data)
-{//ÓÃ»§ÃûÃÜÂë¼ÓÃÜ¼°URLENCODEº¯Êı 
-	char *ptr=(char *)malloc(200);//·ÖÅä200Î»µÄ¿Õ¼äĞÎ³ÉPOST²ÎÊı	
-	char *back=ptr;//±¸·İÖ¸Õë¡£ÒòÎª½«»áÓÃÓÚºóÃæÑ­»·¸´ÖÆĞÅÏ¢ 
+{//ç”¨æˆ·åå¯†ç åŠ å¯†åŠURLENCODEå‡½æ•° 
+	char *ptr=(char *)malloc(200);//åˆ†é…200ä½çš„ç©ºé—´å½¢æˆPOSTå‚æ•°	
+	char *back=ptr;//å¤‡ä»½æŒ‡é’ˆã€‚å› ä¸ºå°†ä¼šç”¨äºåé¢å¾ªç¯å¤åˆ¶ä¿¡æ¯ 
 	if(!ptr)
 	{
 		printf("\n----------------------------------------\n");
-		printf("\n          Îª³ÌĞò·ÖÅäÄÚ´æÊ§°Ü£¡          \n"); 
+		printf("\n          ä¸ºç¨‹åºåˆ†é…å†…å­˜å¤±è´¥ï¼          \n"); 
 		printf("\n----------------------------------------\n");
 		system("pause"); 
 		exit(-1);
 	}
-	strcpy(ptr,"&action=login&drop=0&pop=1&type=2&n=117&mbytes=0&minutes=0&mac=&ac_id=");//POST±ØÒª²ÎÊı 
-	while(*ptr!='\0')ptr++;//µ½´ïPOST²ÎÊıÄ©Î² 
-	*ptr=data->acid;//¸´ÖÆACIDĞÅÏ¢ 
-	ptr++;//½øÈëÏÂÒ»Î» 
+	strcpy(ptr,"&action=login&drop=0&pop=1&type=2&n=117&mbytes=0&minutes=0&mac=&ac_id=");//POSTå¿…è¦å‚æ•° 
+	while(*ptr!='\0')ptr++;//åˆ°è¾¾POSTå‚æ•°æœ«å°¾ 
+	*ptr=data->acid;//å¤åˆ¶ACIDä¿¡æ¯ 
+	ptr++;//è¿›å…¥ä¸‹ä¸€ä½ 
 	for(char *username_Post="&username=%7BSRUN3%7D%0D%0A";*username_Post!='\0';username_Post++,ptr++)
-	{//¸´ÖÆÃû×ÖPOST²ÎÊıÍ·£¬ÕâÀïÍ·ÖĞµÄ·ûºÅÒÑ¾­urlencode¹ı 
+	{//å¤åˆ¶åå­—POSTå‚æ•°å¤´ï¼Œè¿™é‡Œå¤´ä¸­çš„ç¬¦å·å·²ç»urlencodeè¿‡ 
 		*ptr=*username_Post;
 	}
-	char temp[50]="\0";//ÕâÊÇÓÃÀ´ÁÙÊ±´æ´¢¼ÓÃÜºóÓÃ»§ÃûºÍÃÜÂë 
+	char temp[50]="\0";//è¿™æ˜¯ç”¨æ¥ä¸´æ—¶å­˜å‚¨åŠ å¯†åç”¨æˆ·åå’Œå¯†ç  
 	for (int i = 0; i<strlen(data->username); ++i)
-	{//ÓÃ»§Ãû¼ÓÃÜ 
+	{//ç”¨æˆ·ååŠ å¯† 
 		temp[i] = data->username[i] + 4;
 	}
-	CURL *curl1 = curl_easy_init();//Ê¹ÓÃlibcurlÍê³Éurlencode 
-	CURL *curl2 = curl_easy_init();//µ±Ê±²âÊÔÒ»¸öÍê³ÉÓÃ»§ÃûºÍÃÜÂëurlencode»áÔì³É³ÌĞò±ÀÀ££¬ËùÒÔ´Ë´¦ÓÃÁËÁ½¸ö·Ö±ğÍê³É 
+	CURL *curl1 = curl_easy_init();//ä½¿ç”¨libcurlå®Œæˆurlencode 
+	CURL *curl2 = curl_easy_init();//å½“æ—¶æµ‹è¯•ä¸€ä¸ªå®Œæˆç”¨æˆ·åå’Œå¯†ç urlencodeä¼šé€ æˆç¨‹åºå´©æºƒï¼Œæ‰€ä»¥æ­¤å¤„ç”¨äº†ä¸¤ä¸ªåˆ†åˆ«å®Œæˆ 
 	if(!(curl1&&curl2))
-  	{//Èç¹û·ÇÕı³£³õÊ¼»¯ 
-	 	printf("\nLibcurl³õÊ¼»¯Ê§°Ü£¬ÇëÖØĞÂ´ò¿ª±¾³ÌĞòÖØÊÔ!\n");
+  	{//å¦‚æœéæ­£å¸¸åˆå§‹åŒ– 
+	 	printf("\nLibcurlåˆå§‹åŒ–å¤±è´¥ï¼Œè¯·é‡æ–°æ‰“å¼€æœ¬ç¨‹åºé‡è¯•!\n");
 	 	system("pause"); 
 	 	exit(-1); 
 	}
-	char *name_urlencode = curl_easy_escape(curl1,temp,0);//¶ÔÃû×Öurlencode 
+	char *name_urlencode = curl_easy_escape(curl1,temp,0);//å¯¹åå­—urlencode 
 	while(*name_urlencode!='\0')
-	{//¸´ÖÆurlencodeºóµÄÃû×Öµ½POST²ÎÊı×Ö·ûÊı×é 
+	{//å¤åˆ¶urlencodeåçš„åå­—åˆ°POSTå‚æ•°å­—ç¬¦æ•°ç»„ 
 		*ptr=*name_urlencode;
 		ptr++;
 		name_urlencode++;
 	}
-	memset(temp,0,sizeof(temp));//½«temp×Ö·ûÊı×éÖØÖÃ 
-	char key[] = "1234567890";//¼ÓÃÜkey
+	memset(temp,0,sizeof(temp));//å°†tempå­—ç¬¦æ•°ç»„é‡ç½® 
+	char key[] = "1234567890";//åŠ å¯†key
 	int i;
 	for (i = 0; i<strlen(data->password); ++i)
-	{//ÕâÊÇÃÜÂë¼ÓÃÜº¯Êı 
+	{//è¿™æ˜¯å¯†ç åŠ å¯†å‡½æ•° 
 		int ki = data->password[i] ^ key[strlen(key) - i%strlen(key) - 1];
 		char _l[4] = { (char)((ki & 0x0f) + 0x36) };
 		char _h[4] = { (char)((ki >> 4 & 0x0f) + 0x63) };
@@ -335,19 +335,19 @@ char * LOGIN_INFO_HANDLE(struct login_info *data)
 		ptr++;
 		password_urlencode++;
 	}
-	*ptr='\0';//ÉèÖÃ×Ö·ûÊı×é½áÊøÎ» 
-	curl_easy_cleanup(curl1);//ÇåÀí
-	curl_easy_cleanup(curl2);//ÇåÀí
-	return back;//·µ»ØËüµÄÊ×µØÖ· 
+	*ptr='\0';//è®¾ç½®å­—ç¬¦æ•°ç»„ç»“æŸä½ 
+	curl_easy_cleanup(curl1);//æ¸…ç†
+	curl_easy_cleanup(curl2);//æ¸…ç†
+	return back;//è¿”å›å®ƒçš„é¦–åœ°å€ 
 }
 
 int LOGIN(struct login_info *data,int * state,int * file)
-{//µÇÈëº¯Êı 
-	data=(info *)malloc(sizeof(info));//´æÈ¡µÇÂ½ĞÅÏ¢ÓÃ 
+{//ç™»å…¥å‡½æ•° 
+	data=(info *)malloc(sizeof(info));//å­˜å–ç™»é™†ä¿¡æ¯ç”¨ 
 	if(!data)
 	{
 		printf("\n----------------------------------------\n");
-		printf("\n          Îª³ÌĞò·ÖÅäÄÚ´æÊ§°Ü£¡          \n"); 
+		printf("\n          ä¸ºç¨‹åºåˆ†é…å†…å­˜å¤±è´¥ï¼          \n"); 
 		printf("\n----------------------------------------\n");
 		system("pause"); 
 		exit(-1);
@@ -361,26 +361,26 @@ int LOGIN(struct login_info *data,int * state,int * file)
 		{
 			fscanf(read,"%s",temp);
 			if(strcmp(temp,"{")==0)
-			{//ÒÔ{Îª¶ÁÈ¡±êÊ¶ 
+			{//ä»¥{ä¸ºè¯»å–æ ‡è¯† 
 				break;
 			}
 		}
-		fscanf(read,"%*10s%s",data->username);//ÈÓµôÇ°ÃæµÄ10Î»£¬ÕıºÃÈÓµô#username=¶Á 
+		fscanf(read,"%*10s%s",data->username);//æ‰”æ‰å‰é¢çš„10ä½ï¼Œæ­£å¥½æ‰”æ‰#username=è¯» 
 		fscanf(read,"%*10s%s",data->password);
 		fscanf(read,"%*6s%c",&data->acid);
 		fscanf(read,"%*12s%c",&data->auto_login);
 		fclose(read);
 		if(data->auto_login=='1')
-		{//µÚÒ»´Î´æÔÚÅäÖÃÎÄ¼şµÇÂ½ÏÔÊ¾ 
+		{//ç¬¬ä¸€æ¬¡å­˜åœ¨é…ç½®æ–‡ä»¶ç™»é™†æ˜¾ç¤º 
 			printf("\n----------------------------------------\n");
-			printf("\n      ¼ì²âµ½ÅäÖÃÎÄ¼ş£¬×Ô¶¯µÇÂ½ÖĞ!       \n"); 
+			printf("\n      æ£€æµ‹åˆ°é…ç½®æ–‡ä»¶ï¼Œè‡ªåŠ¨ç™»é™†ä¸­!       \n"); 
 			printf("\n----------------------------------------\n");
 		}
 		if(data->auto_login=='0')
 		{
 			printf("\n----------------------------------------\n");
-			printf("\n              ¼ì²âµ½ÅäÖÃÎÄ¼ş£¬          \n");
-			printf("\n        ÄãÊÇ·ñÏÖÔÚµÇÂ½:<1.ÊÇ/2.ÍË³ö>    \n"); 
+			printf("\n              æ£€æµ‹åˆ°é…ç½®æ–‡ä»¶ï¼Œ          \n");
+			printf("\n        ä½ æ˜¯å¦ç°åœ¨ç™»é™†:<1.æ˜¯/2.é€€å‡º>    \n"); 
 			printf("\n----------------------------------------\n");
 			while(1)
 			{
@@ -394,7 +394,7 @@ int LOGIN(struct login_info *data,int * state,int * file)
 				else
 				{
 					printf("\n----------------------------------------\n");
-					printf("\n             ÊäÈë´íÎóÇëÖØÊÔ!            \n"); 
+					printf("\n             è¾“å…¥é”™è¯¯è¯·é‡è¯•!            \n"); 
 					printf("\n----------------------------------------\n");
 				}
 			}
@@ -402,8 +402,8 @@ int LOGIN(struct login_info *data,int * state,int * file)
 	}
 	else
 	{
-		printf("\n            ¶ÁÈ¡²»µ½ÅäÖÃÎÄ¼ş            \n"); 
-		printf("\n           ÇëÊäÈëÄúµÄĞÅÏ¢µÇÂ½           \n"); 
+		printf("\n            è¯»å–ä¸åˆ°é…ç½®æ–‡ä»¶            \n"); 
+		printf("\n           è¯·è¾“å…¥æ‚¨çš„ä¿¡æ¯ç™»é™†           \n"); 
 		printf("\n----------------------------------------\n");
 		*file=0;
 	}
@@ -412,31 +412,31 @@ int LOGIN(struct login_info *data,int * state,int * file)
 		if(*file==0||*file==-1)
 		{
 			if(*state==-2||*state==0)
-			{//µÚÒ»´ÎÊäÈë»òÕßÓÃ»§Ãû´íÎó 
+			{//ç¬¬ä¸€æ¬¡è¾“å…¥æˆ–è€…ç”¨æˆ·åé”™è¯¯ 
 				printf("\n----------------------------------------\n");
-				printf("\n            ÇëÊäÈëÄãµÄÓÃ»§Ãû:           \n");
+				printf("\n            è¯·è¾“å…¥ä½ çš„ç”¨æˆ·å:           \n");
 				gets(data->username); 
 			} 
 			if(*state==-1||*state==-2||*state==0) 
-			{//µÚÒ»´ÎÊäÈë»òÕßÃÜÂëÊäÈë´íÎó 
+			{//ç¬¬ä¸€æ¬¡è¾“å…¥æˆ–è€…å¯†ç è¾“å…¥é”™è¯¯ 
 				printf("\n----------------------------------------\n");
-				printf("\n         ÇëÊäÈëÄãµÄÃÜÂë£¨²»ÏÔÊ¾£©:      \n");
+				printf("\n         è¯·è¾“å…¥ä½ çš„å¯†ç ï¼ˆä¸æ˜¾ç¤ºï¼‰:      \n");
 				char ch;
 				unsigned int i;
 				for (i = 0; (ch = getch()) != 13; )
-				{//ÃÜÂë²»»ØÏÔÊäÈë 
+				{//å¯†ç ä¸å›æ˜¾è¾“å…¥ 
 					if (ch == 8)
-					{//Èç¹û°´ÏÂÁËÍË¸ñ¼ü 
-						if (i == 0)//ÏÈÅĞ¶ÏÊÇ·ñµ½ÁËÃÜÂëµÚÒ»Î» 
+					{//å¦‚æœæŒ‰ä¸‹äº†é€€æ ¼é”® 
+						if (i == 0)//å…ˆåˆ¤æ–­æ˜¯å¦åˆ°äº†å¯†ç ç¬¬ä¸€ä½ 
 							data->password[0] = '\0';
 						else
-						{//·ñÔò½«ËüÇ°Ò»Î»±ä³É¿Õ 
+						{//å¦åˆ™å°†å®ƒå‰ä¸€ä½å˜æˆç©º 
 							data->password[i - 1] = '\0';
 							i--;
 						}
 					}
 					else
-					{//·ñÔòÍê³É±¾Î»ÊäÈë²¢ÇÒ½øĞĞÏÂÒ»Î»ÊäÈë 
+					{//å¦åˆ™å®Œæˆæœ¬ä½è¾“å…¥å¹¶ä¸”è¿›è¡Œä¸‹ä¸€ä½è¾“å…¥ 
 						data->password[i] = ch;
 						i++;
 					}
@@ -445,11 +445,11 @@ int LOGIN(struct login_info *data,int * state,int * file)
 				printf("\n");
 				printf("\n----------------------------------------\n");
 			} 
-			data->acid='1';//Ä¬ÈÏACID=1 
-			data->auto_login='0';//Ä¬ÈÏ²»×Ô¶¯µÇÂ½ 
+			data->acid='1';//é»˜è®¤ACID=1 
+			data->auto_login='0';//é»˜è®¤ä¸è‡ªåŠ¨ç™»é™† 
 			if(*state==-3)
-			{//ACID´íÎóÇé¿ö 
-				data->acid='2';//Èç¹û´íÎó×Ô¶¯ĞŞ¸Ä 
+			{//ACIDé”™è¯¯æƒ…å†µ 
+				data->acid='2';//å¦‚æœé”™è¯¯è‡ªåŠ¨ä¿®æ”¹ 
 			}  
 		}
 		HTTP_POST(LOGIN_INFO_HANDLE(data),state);
@@ -463,7 +463,7 @@ int LOGIN(struct login_info *data,int * state,int * file)
 			while(*state!=1)
 			{
 				printf("\n----------------------------------------\n");
-				printf("\n µÇÂ½Ê§°Ü£¬ÄãÊÇ·ñÏÖÔÚÖØÊÔ:<1.ÊÇ/2.ÍË³ö> \n"); 
+				printf("\n ç™»é™†å¤±è´¥ï¼Œä½ æ˜¯å¦ç°åœ¨é‡è¯•:<1.æ˜¯/2.é€€å‡º> \n"); 
 				printf("\n----------------------------------------\n");
 				while(1)
 				{
@@ -477,7 +477,7 @@ int LOGIN(struct login_info *data,int * state,int * file)
 					else
 					{
 						printf("\n----------------------------------------\n");
-						printf("\n             ÊäÈë´íÎóÇëÖØÊÔ!            \n"); 
+						printf("\n             è¾“å…¥é”™è¯¯è¯·é‡è¯•!            \n"); 
 						printf("\n----------------------------------------\n");
 					}
 				}
@@ -488,7 +488,7 @@ int LOGIN(struct login_info *data,int * state,int * file)
 	if(*state==1&&(*file==0||*file==-1)) 
 	{
 		printf("\n----------------------------------------\n");
-		printf("\n      ÊÇ·ñ±£´æÄãµÄĞÅÏ¢<1.ÊÇ/2.·ñ>       \n"); 
+		printf("\n      æ˜¯å¦ä¿å­˜ä½ çš„ä¿¡æ¯<1.æ˜¯/2.å¦>       \n"); 
 		printf("\n----------------------------------------\n");
 		while(1)
 		{
@@ -496,7 +496,7 @@ int LOGIN(struct login_info *data,int * state,int * file)
    			if(input=='1')
    			{ 
    				printf("\n----------------------------------------\n");
-				printf("\n      ÊÇ·ñ×Ô¶¯µÇÂ½ÍøÂç<1.ÊÇ/2.·ñ>       \n"); 
+				printf("\n      æ˜¯å¦è‡ªåŠ¨ç™»é™†ç½‘ç»œ<1.æ˜¯/2.å¦>       \n"); 
 				printf("\n----------------------------------------\n");
 				while(1)
 				{
@@ -514,7 +514,7 @@ int LOGIN(struct login_info *data,int * state,int * file)
 	   				else
 					{
 						printf("\n----------------------------------------\n");
-						printf("\n             ÊäÈë´íÎóÇëÖØÊÔ!            \n"); 
+						printf("\n             è¾“å…¥é”™è¯¯è¯·é‡è¯•!            \n"); 
 						printf("\n----------------------------------------\n");
 					}
 				}
@@ -522,13 +522,13 @@ int LOGIN(struct login_info *data,int * state,int * file)
 				if(!out)
 				{
 					printf("\n----------------------------------------\n");
-					printf("\n		  	    ÎÄ¼şÁí´æÊ§°Ü 	  		  \n");
+					printf("\n		  	    æ–‡ä»¶å¦å­˜å¤±è´¥ 	  		  \n");
 					printf("\n----------------------------------------\n");
 					return -1; 
 				}
 				fprintf(out,"/**************************************\n");
-				fprintf(out,"ÕâÊÇĞ£Ô°ÍøµÇÂ½Æ÷ÅäÖÃÎÄ¼ş\n");
-				fprintf(out,"Îª·ÀÖ¹´íÎó£¬ÇëÎğ¸ü¸Ä£¡\n");
+				fprintf(out,"è¿™æ˜¯æ ¡å›­ç½‘ç™»é™†å™¨é…ç½®æ–‡ä»¶\n");
+				fprintf(out,"ä¸ºé˜²æ­¢é”™è¯¯ï¼Œè¯·å‹¿æ›´æ”¹ï¼\n");
 				fprintf(out,"**************************************/\n");
 				fprintf(out,"\n");
 				fprintf(out,"{\n");
@@ -545,7 +545,7 @@ int LOGIN(struct login_info *data,int * state,int * file)
 			else
 			{
 				printf("\n----------------------------------------\n");
-				printf("\n             ÊäÈë´íÎóÇëÖØÊÔ!            \n"); 
+				printf("\n             è¾“å…¥é”™è¯¯è¯·é‡è¯•!            \n"); 
 				printf("\n----------------------------------------\n");
 			}
 		}
@@ -554,29 +554,29 @@ int LOGIN(struct login_info *data,int * state,int * file)
 
 int main(void)
 {
-	system("title Ğ£Ô°ÍøµÇÂ½Æ÷CÓïÑÔ°æ V0.0.9");//ÉèÖÃ³ÌĞòÃû³Æ 
-	system("mode con cols=40");//ÉèÖÃ¿í¶È40
-	system("color A");//×ÖÌåÉèÖÃÎªÂÌÉ« 
-	int state=0;//ÓÃ»§×´Ì¬±äÁ¿£¬1ÎªµÇÂ½£¬0ÎªÎ´µÇÂ¼£¬-1ÃÜÂë´íÎó£¬-2ÓÃ»§Ãû´íÎó£¬-3ACID´íÎó
-	int file=0;//ÎÄ¼ş×´Ì¬±äÁ¿£¬1Îª´æÔÚ£¬2Îª²»´æÔÚ£¬-1´ú±íÎÄ¼şÄÚÈİ´íÎó»áÖØĞÂ¸²¸Ç±£´æ 
-	PRINT_WELCOME_INFO();//Êä³ö»¶Ó­ĞÅÏ¢ 
-	HTTP_GET_INFO(&state);//»ñÈ¡ÓÃ»§×´Ì¬ 
-	struct login_info *data=NULL;//¶¨ÒåÓÃ»§Êı¾İ½á¹¹ÌåÖ¸Õë 
+	system("title æ ¡å›­ç½‘ç™»é™†å™¨Cè¯­è¨€ç‰ˆ V0.0.9");//è®¾ç½®ç¨‹åºåç§° 
+	system("mode con cols=40");//è®¾ç½®å®½åº¦40
+	system("color A");//å­—ä½“è®¾ç½®ä¸ºç»¿è‰² 
+	int state=0;//ç”¨æˆ·çŠ¶æ€å˜é‡ï¼Œ1ä¸ºç™»é™†ï¼Œ0ä¸ºæœªç™»å½•ï¼Œ-1å¯†ç é”™è¯¯ï¼Œ-2ç”¨æˆ·åé”™è¯¯ï¼Œ-3ACIDé”™è¯¯
+	int file=0;//æ–‡ä»¶çŠ¶æ€å˜é‡ï¼Œ1ä¸ºå­˜åœ¨ï¼Œ2ä¸ºä¸å­˜åœ¨ï¼Œ-1ä»£è¡¨æ–‡ä»¶å†…å®¹é”™è¯¯ä¼šé‡æ–°è¦†ç›–ä¿å­˜ 
+	PRINT_WELCOME_INFO();//è¾“å‡ºæ¬¢è¿ä¿¡æ¯ 
+	HTTP_GET_INFO(&state);//è·å–ç”¨æˆ·çŠ¶æ€ 
+	struct login_info *data=NULL;//å®šä¹‰ç”¨æˆ·æ•°æ®ç»“æ„ä½“æŒ‡é’ˆ 
 	if(state==0)
-	{//Èç¹û²»ÔÚÏß 
-		LOGIN(data,&state,&file);//µÇÈë 
+	{//å¦‚æœä¸åœ¨çº¿ 
+		LOGIN(data,&state,&file);//ç™»å…¥ 
 	}
 	else
-   	{//ÒÑµÇÂ¼ 
+   	{//å·²ç™»å½• 
 		printf("\n----------------------------------------\n");
-		printf("\n      ÄãÊÇ·ñÏÖÔÚ×¢Ïú:<1.ÊÇ/2.ÍË³ö>      \n"); 
+		printf("\n      ä½ æ˜¯å¦ç°åœ¨æ³¨é”€:<1.æ˜¯/2.é€€å‡º>      \n"); 
 		printf("\n----------------------------------------\n");
 		while(1)
 		{
 			char input=getch();
    			if(input=='1')
    			{ 
-   				HTTP_POST(LOGOUT,&state);//×¢Ïú 
+   				HTTP_POST(LOGOUT,&state);//æ³¨é”€ 
    				break;
    			}
 			if(input=='2')
@@ -584,21 +584,21 @@ int main(void)
 			else
 			{
 				printf("\n----------------------------------------\n");
-				printf("\n             ÊäÈë´íÎóÇëÖØÊÔ!            \n"); 
+				printf("\n             è¾“å…¥é”™è¯¯è¯·é‡è¯•!            \n"); 
 				printf("\n----------------------------------------\n");
 			}
 		}
    		if(state==0)
-   		{//×¢ÏúºóÖØµÇÂ½ 
+   		{//æ³¨é”€åé‡ç™»é™† 
    			printf("\n----------------------------------------\n");
-			printf("\n      ÄãÊÇ·ñÏÖÔÚÖØµÇÂ½:<1.ÊÇ/2.ÍË³ö>    \n"); 
+			printf("\n      ä½ æ˜¯å¦ç°åœ¨é‡ç™»é™†:<1.æ˜¯/2.é€€å‡º>    \n"); 
 			printf("\n----------------------------------------\n");
 			while(1)
 			{
 				char input=getch();
 	   			if(input=='1')
 	   			{ 
-					LOGIN(data,&state,&file);//µÇÈë 
+					LOGIN(data,&state,&file);//ç™»å…¥ 
 	   				break;
 	   			}
    				if(input=='2')
@@ -606,7 +606,7 @@ int main(void)
    				else
 				{
 					printf("\n----------------------------------------\n");
-					printf("\n             ÊäÈë´íÎóÇëÖØÊÔ!            \n"); 
+					printf("\n             è¾“å…¥é”™è¯¯è¯·é‡è¯•!            \n"); 
 					printf("\n----------------------------------------\n");
 				}
 			}
@@ -614,7 +614,7 @@ int main(void)
 	} 
 	free(data); 
 	printf("\n----------------------------------------\n");
-	printf("\n  ¸ĞĞ»ÄúµÄÊ¹ÓÃ£¬»¶Ó­¸øÎÒÌá¹©¸Ä½ø½¨Òé£¡  \n"); 
+	printf("\n  æ„Ÿè°¢æ‚¨çš„ä½¿ç”¨ï¼Œæ¬¢è¿ç»™æˆ‘æä¾›æ”¹è¿›å»ºè®®ï¼  \n"); 
 	printf("\n----------------------------------------\n");
 	system("pause"); 
 	return 0;
