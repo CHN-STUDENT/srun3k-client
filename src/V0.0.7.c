@@ -3,7 +3,7 @@
 #include <string.h>
 #include <conio.h>
 
-const char POSTURL[]="http://172.16.154.130:69/cgi-bin/srun_portal";  //¶¨ÒåPOSTµØÖ·
+const char POSTURL[]="http://172.16.154.130:69/cgi-bin/srun_portal";  //å®šä¹‰POSTåœ°å€
 
 struct string {
   char *ptr;
@@ -14,7 +14,7 @@ void init_string(struct string *s) {
   s->len = 0;
   s->ptr = malloc(s->len+1);
   if (s->ptr == NULL) {
-    fprintf(stderr, "\n            ÄÚ´æ´íÎó£¡            \n");
+    fprintf(stderr, "\n            å†…å­˜é”™è¯¯ï¼            \n");
     exit(EXIT_FAILURE);
   }
   s->ptr[0] = '\0';
@@ -25,7 +25,7 @@ size_t writefunc(void *ptr, size_t size, size_t nmemb, struct string *s)
   size_t new_len = s->len + size*nmemb;
   s->ptr = realloc(s->ptr, new_len+1);
   if (s->ptr == NULL) {
-    fprintf(stderr, "\n            ÄÚ´æ´íÎó!            \n");
+    fprintf(stderr, "\n            å†…å­˜é”™è¯¯!            \n");
     exit(EXIT_FAILURE);
   }
   memcpy(s->ptr+s->len, ptr, size*nmemb);
@@ -39,8 +39,8 @@ int HTTP_LOGIN(CURL *curl,CURLcode res)
 {
 	CURL *curl1 = curl_easy_init();
 	if(!(curl&&curl1))
-  	{//Èç¹û·ÇÕı³£³õÊ¼»¯ 
-	 	printf("\nLibcurl³õÊ¼»¯Ê§°Ü£¬ÇëÖØĞÂ´ò¿ª±¾³ÌĞòÖØÊÔ!\n");
+  	{//å¦‚æœéæ­£å¸¸åˆå§‹åŒ– 
+	 	printf("\nLibcurlåˆå§‹åŒ–å¤±è´¥ï¼Œè¯·é‡æ–°æ‰“å¼€æœ¬ç¨‹åºé‡è¯•!\n");
 	 	system("pause"); 
 	 	exit(-1); 
 	}
@@ -48,15 +48,15 @@ int HTTP_LOGIN(CURL *curl,CURLcode res)
 	{ 
 		char username[20];
 		char username_Post[50]="{SRUN3}\r\n"; 
-		char LOGIN[200]="&ac_id=1&action=login&drop=0&pop=1&type=2&n=117&mbytes=0&minutes=0&mac=&username=";
+		char LOGIN[200]="&ac_id=1&action=login&drop=0&pop=1&type=3&n=117&mbytes=0&minutes=0&mac=&username=";
 		char *ptr=LOGIN;
 		while(*ptr!='\0')
  		  	ptr++;  
  		printf("\n----------------------------------------\n");
-		printf("\n            ÇëÊäÈëÄãµÄÓÃ»§Ãû:           \n");
+		printf("\n            è¯·è¾“å…¥ä½ çš„ç”¨æˆ·å:           \n");
 		gets(username); 
 		for (int i = 0; i<strlen(username); ++i)
-		{//ÓÃ»§ÃûÊäÈë¼ÓÃÜ 
+		{//ç”¨æˆ·åè¾“å…¥åŠ å¯† 
 			username[i] = username[i] + 4;
 		}
 		strcat(username_Post,username);
@@ -73,7 +73,7 @@ int HTTP_LOGIN(CURL *curl,CURLcode res)
 		}
 		char password[20];
 		printf("\n----------------------------------------\n");
-		printf("\n         ÇëÊäÈëÄãµÄÃÜÂë£¨²»ÏÔÊ¾£©:      \n");
+		printf("\n         è¯·è¾“å…¥ä½ çš„å¯†ç ï¼ˆä¸æ˜¾ç¤ºï¼‰:      \n");
 		char ch;
 		unsigned int i;
 		for (i = 0; (ch = getch()) != 13; )
@@ -98,7 +98,7 @@ int HTTP_LOGIN(CURL *curl,CURLcode res)
 		password[i] = '\0';
 		printf("\n");
 		printf("\n----------------------------------------\n");
-		char key[] = "1234567890";//¼ÓÃÜkey
+		char key[] = "1234567890";//åŠ å¯†key
 		char password_encrypt[50] ="";
 		for (i = 0; i<strlen(password); ++i)
 		{
@@ -124,30 +124,30 @@ int HTTP_LOGIN(CURL *curl,CURLcode res)
 			password_urlencode++;
 		}
 		*ptr='\0'; 
-		curl_easy_cleanup(curl);//ÇåÀí
-		curl_easy_cleanup(curl1);//ÇåÀí
+		curl_easy_cleanup(curl);//æ¸…ç†
+		curl_easy_cleanup(curl1);//æ¸…ç†
 		struct string in;
     	init_string(&in);
     	CURL *curl_post;
     	curl_post = curl_easy_init();
     	if(!(curl_post))
-	  	{//Èç¹û·ÇÕı³£³õÊ¼»¯ 
-		 	printf("\nLibcurl³õÊ¼»¯Ê§°Ü£¬ÇëÖØĞÂ´ò¿ª±¾³ÌĞòÖØÊÔ!\n");
+	  	{//å¦‚æœéæ­£å¸¸åˆå§‹åŒ– 
+		 	printf("\nLibcurlåˆå§‹åŒ–å¤±è´¥ï¼Œè¯·é‡æ–°æ‰“å¼€æœ¬ç¨‹åºé‡è¯•!\n");
 		 	system("pause"); 
 		 	exit(-1); 
 		}
-		curl_easy_setopt(curl_post, CURLOPT_URL, POSTURL); //ÉèÖÃPOSTµØÖ·
-		curl_easy_setopt(curl_post, CURLOPT_POSTFIELDS,LOGIN);//ÉèÖÃPOST²ÎÊı
-		curl_easy_setopt(curl_post,CURLOPT_TIMEOUT,1L);//³¬Ê±ÉèÖÃ³É1s
+		curl_easy_setopt(curl_post, CURLOPT_URL, POSTURL); //è®¾ç½®POSTåœ°å€
+		curl_easy_setopt(curl_post, CURLOPT_POSTFIELDS,LOGIN);//è®¾ç½®POSTå‚æ•°
+		curl_easy_setopt(curl_post,CURLOPT_TIMEOUT,1L);//è¶…æ—¶è®¾ç½®æˆ1s
 		curl_easy_setopt(curl_post, CURLOPT_WRITEFUNCTION, writefunc);
 	    curl_easy_setopt(curl_post, CURLOPT_WRITEDATA, &in);
-		res = curl_easy_perform(curl_post);//Æô¶¯libcurl 
+		res = curl_easy_perform(curl_post);//å¯åŠ¨libcurl 
 		if (res != CURLE_OK)
 		{
-			printf("\n              *** ´íÎó: ***             \n");
-			printf("\n  ÎŞ·¨»ñÈ¡ÄúµÄĞÅÏ¢,Çë¼ì²éÄúµÄÍøÂçÁ¬½Ó!  \n");
+			printf("\n              *** é”™è¯¯: ***             \n");
+			printf("\n  æ— æ³•è·å–æ‚¨çš„ä¿¡æ¯,è¯·æ£€æŸ¥æ‚¨çš„ç½‘ç»œè¿æ¥!  \n");
 			printf("\n----------------------------------------\n");
-			curl_easy_cleanup(curl);//ÇåÀí
+			curl_easy_cleanup(curl);//æ¸…ç†
 			system("pause"); 
 			exit(-1);
 		}
@@ -156,32 +156,32 @@ int HTTP_LOGIN(CURL *curl,CURLcode res)
 		for(;*k!='\0';k++) 
 		{
 			if(*k=='m')
-			{//²ÎÊı´íÎóÇé¿ö 
-				printf("\n              È±ÉÙ²ÎÊı              \n");
+			{//å‚æ•°é”™è¯¯æƒ…å†µ 
+				printf("\n              ç¼ºå°‘å‚æ•°              \n");
 				break;
 			} 
 			else if(*k=='n'&&*(k+2)=='o')//
-			{//µÇÂ½³É¹¦Çé¿ö
-				printf("\n              µÇÂ½³É¹¦              \n");
+			{//ç™»é™†æˆåŠŸæƒ…å†µ
+				printf("\n              ç™»é™†æˆåŠŸ              \n");
 				break;
 			} 
 			else if(*k=='P'&&*(k+1)=='a') 
-			{//ÃÜÂë´íÎóÇé¿ö
-				printf("\n        ÃÜÂë´íÎó£¬Çë¼ì²éÊäÈë¡£      \n");
+			{//å¯†ç é”™è¯¯æƒ…å†µ
+				printf("\n        å¯†ç é”™è¯¯ï¼Œè¯·æ£€æŸ¥è¾“å…¥ã€‚      \n");
 				break;
 			} 
 			else if(*k=='U'&&*(k+1)=='s')//
-			{//ÓÃ»§Ãû´íÎóÇé¿ö
-				printf("\n      ÓÃ»§Ãû²»´æÔÚ£¬Çë¼ì²éÊäÈë¡£    \n");
+			{//ç”¨æˆ·åé”™è¯¯æƒ…å†µ
+				printf("\n      ç”¨æˆ·åä¸å­˜åœ¨ï¼Œè¯·æ£€æŸ¥è¾“å…¥ã€‚    \n");
 				break;
 			} 
 			else if(*k=='I'&&*(k+1)=='N') 
-			{//ACID´íÎóÇé¿ö
-				printf("\n              ACID´íÎó              \n");
+			{//ACIDé”™è¯¯æƒ…å†µ
+				printf("\n              ACIDé”™è¯¯              \n");
 				break;
 			}
 		}
-		curl_easy_cleanup(curl_post);//ÇåÀí
+		curl_easy_cleanup(curl_post);//æ¸…ç†
 		printf("\n----------------------------------------\n");
 	} 
 	
@@ -189,21 +189,21 @@ int HTTP_LOGIN(CURL *curl,CURLcode res)
 
 int HTTP_LOGOUT(CURL *curl,CURLcode res) 
 {
-	char LOGOUT[50] = "username=0&mac=&type=2&action=logout&ac_id=1";//Ñ§³¤×¥°ü·ÖÎöµÃµ½µÄÍ·ÎÄ¼ş
+	char LOGOUT[50] = "username=0&mac=&type=2&action=logout&ac_id=1";//å­¦é•¿æŠ“åŒ…åˆ†æå¾—åˆ°çš„å¤´æ–‡ä»¶
 	struct string out;
     init_string(&out);
-	curl_easy_setopt(curl, CURLOPT_URL, POSTURL); //ÉèÖÃPOSTµØÖ·
-	curl_easy_setopt(curl, CURLOPT_POSTFIELDS,LOGOUT);//ÉèÖÃPOST²ÎÊı
-	curl_easy_setopt(curl,CURLOPT_TIMEOUT,1L);//³¬Ê±ÉèÖÃ³É1s
+	curl_easy_setopt(curl, CURLOPT_URL, POSTURL); //è®¾ç½®POSTåœ°å€
+	curl_easy_setopt(curl, CURLOPT_POSTFIELDS,LOGOUT);//è®¾ç½®POSTå‚æ•°
+	curl_easy_setopt(curl,CURLOPT_TIMEOUT,1L);//è¶…æ—¶è®¾ç½®æˆ1s
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writefunc);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &out);
-	res = curl_easy_perform(curl);//Æô¶¯libcurl 
+	res = curl_easy_perform(curl);//å¯åŠ¨libcurl 
 	if (res != CURLE_OK)
 	{
-		printf("\n              *** ´íÎó: ***             \n");
-		printf("\n  ÎŞ·¨»ñÈ¡ÄúµÄĞÅÏ¢,Çë¼ì²éÄúµÄÍøÂçÁ¬½Ó!  \n");
+		printf("\n              *** é”™è¯¯: ***             \n");
+		printf("\n  æ— æ³•è·å–æ‚¨çš„ä¿¡æ¯,è¯·æ£€æŸ¥æ‚¨çš„ç½‘ç»œè¿æ¥!  \n");
 		printf("\n----------------------------------------\n");
-		curl_easy_cleanup(curl);//ÇåÀí
+		curl_easy_cleanup(curl);//æ¸…ç†
 		system("pause"); 
 		exit(-1);
 	}
@@ -212,81 +212,81 @@ int HTTP_LOGOUT(CURL *curl,CURLcode res)
 	for(;;k++) 
 	{
 		if(*k=='m')
-		{//²ÎÊı´íÎóÇé¿ö 
-			printf("\n              È±ÉÙ²ÎÊı              \n");
+		{//å‚æ•°é”™è¯¯æƒ…å†µ 
+			printf("\n              ç¼ºå°‘å‚æ•°              \n");
 			break;
 		} 
 		else if(*k=='t'&&*(k+2)=='o')
-		{//×¢Ïú³É¹¦Çé¿ö
-			printf("\n              ×¢Ïú³É¹¦              \n");
+		{//æ³¨é”€æˆåŠŸæƒ…å†µ
+			printf("\n              æ³¨é”€æˆåŠŸ              \n");
 			return 0;
 			break;
 		}
 		else if(*k=='I'&&*(k+1)=='N') 
-		{//ACID´íÎóÇé¿ö
-			printf("\n              ACID´íÎó              \n");
+		{//ACIDé”™è¯¯æƒ…å†µ
+			printf("\n              ACIDé”™è¯¯              \n");
 			break;
 		}
 		else if(*k=='Y'&&*(k+1)=='o')
-		{//²»ÔÚÏßÇé¿ö 
-			printf("\n         Äú²»ÔÚÏß£¬µÇ³öÊ§°Ü         \n");
+		{//ä¸åœ¨çº¿æƒ…å†µ 
+			printf("\n         æ‚¨ä¸åœ¨çº¿ï¼Œç™»å‡ºå¤±è´¥         \n");
 			return 0; 
 			break;
 		} 
 	}
-	curl_easy_cleanup(curl);//ÇåÀí
+	curl_easy_cleanup(curl);//æ¸…ç†
 }; 
 
 int HTTP_GET_INFO(CURL *curl,CURLcode res)
 {
-	printf("\n-------ÕıÔÚ»ñÈ¡ÄúµÄĞÅÏ¢£¬ÇëÉÔºó:--------\n"); 
+	printf("\n-------æ­£åœ¨è·å–æ‚¨çš„ä¿¡æ¯ï¼Œè¯·ç¨å:--------\n"); 
 	struct string s;
     init_string(&s);
-	const char GET_INFO_URL[]="http://172.16.154.130/cgi-bin/rad_user_info";//¶¨Òå»ñÈ¡µÇÂ½×´Ì¬º¯Êı
-	curl_easy_setopt(curl,CURLOPT_URL,GET_INFO_URL);//ÉèÖÃµÃµ½ÓÃ»§ĞÅÏ¢µÄGETµØÖ·
+	const char GET_INFO_URL[]="http://172.16.154.130/cgi-bin/rad_user_info";//å®šä¹‰è·å–ç™»é™†çŠ¶æ€å‡½æ•°
+	curl_easy_setopt(curl,CURLOPT_URL,GET_INFO_URL);//è®¾ç½®å¾—åˆ°ç”¨æˆ·ä¿¡æ¯çš„GETåœ°å€
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writefunc);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &s);
-	curl_easy_setopt(curl,CURLOPT_TIMEOUT,1L);//³¬Ê±ÉèÖÃ³É1s
-	res = curl_easy_perform(curl);//Æô¶¯libcurl 
+	curl_easy_setopt(curl,CURLOPT_TIMEOUT,1L);//è¶…æ—¶è®¾ç½®æˆ1s
+	res = curl_easy_perform(curl);//å¯åŠ¨libcurl 
 	if (res != CURLE_OK)
 	{
-		printf("\n              *** ´íÎó: ***             \n");
-		printf("\n  ÎŞ·¨»ñÈ¡ÄúµÄĞÅÏ¢,Çë¼ì²éÄúµÄÍøÂçÁ¬½Ó!  \n");
+		printf("\n              *** é”™è¯¯: ***             \n");
+		printf("\n  æ— æ³•è·å–æ‚¨çš„ä¿¡æ¯,è¯·æ£€æŸ¥æ‚¨çš„ç½‘ç»œè¿æ¥!  \n");
 		printf("\n----------------------------------------\n");
-		curl_easy_cleanup(curl);//ÇåÀí
+		curl_easy_cleanup(curl);//æ¸…ç†
 		system("pause"); 
 		exit(-1);
 	}
 	(char *)s.ptr;
 	if(*s.ptr=='n')
-	{//Èç¹ûÎ´µÇÂ½ 
-		printf("\n       Äú²»ÔÚÏß£¬ÇëÄãÊäÈëĞÅÏ¢µÇÂ½:        \n");
+	{//å¦‚æœæœªç™»é™† 
+		printf("\n       æ‚¨ä¸åœ¨çº¿ï¼Œè¯·ä½ è¾“å…¥ä¿¡æ¯ç™»é™†:        \n");
 		return 0;
 	}
 	else
-		{//Èç¹ûÒÑµÇÂ¼ 
-			printf("\n       ÄúÒÑÔÚÏß£¬ÏÂÃæÊÇÄúµÄĞÅÏ¢:        \n");
+		{//å¦‚æœå·²ç™»å½• 
+			printf("\n       æ‚¨å·²åœ¨çº¿ï¼Œä¸‹é¢æ˜¯æ‚¨çš„ä¿¡æ¯:        \n");
 			printf("\n----------------------------------------\n");
 			char *j=(char *)s.ptr;
-			for(int flag=0;;s.ptr++)//¿ªÊ¼Ñ­»·Ö±µ½Êı¾İÄ©Î² 
+			for(int flag=0;;s.ptr++)//å¼€å§‹å¾ªç¯ç›´åˆ°æ•°æ®æœ«å°¾ 
 				{
-					char temp[20]; //¶¨ÒåÒ»¸öÁÙÊ±±äÁ¿
-					if(*s.ptr==',')//Èç¹ûµ±Ç°Î»Îª,·Ö¸ô·û 
+					char temp[20]; //å®šä¹‰ä¸€ä¸ªä¸´æ—¶å˜é‡
+					if(*s.ptr==',')//å¦‚æœå½“å‰ä½ä¸º,åˆ†éš”ç¬¦ 
 					{	
-						flag++;//,·Ö¸ô·û¼ÆÊı 
-						char *t=temp;//¶¨ÒåÒ»¸öÁÙÊ±Ö¸ÕëÖ¸Ïòt
+						flag++;//,åˆ†éš”ç¬¦è®¡æ•° 
+						char *t=temp;//å®šä¹‰ä¸€ä¸ªä¸´æ—¶æŒ‡é’ˆæŒ‡å‘t
 						for(;*j!=*s.ptr;j++,t++)
 							*t=*j; 
 						*t='\0';
 						if(flag==1)
-							printf("\nÄúµÄµÇÈëÓÃ»§ÃûÊÇ: %s\n",temp);
+							printf("\næ‚¨çš„ç™»å…¥ç”¨æˆ·åæ˜¯: %s\n",temp);
 						if(flag==7)
-							printf("\nÄúÕâ¸öÔÂËùÓÃÁ÷Á¿: %f GB\n",1.0*atof(temp)/1073741824);//atof(string)×ª¸¡µã 
+							printf("\næ‚¨è¿™ä¸ªæœˆæ‰€ç”¨æµé‡: %f GB\n",1.0*atof(temp)/1073741824);//atof(string)è½¬æµ®ç‚¹ 
 						if(flag==8)
-							printf("\nÄúÕâ¸öÔÂËùÓÃÊ±¼ä: %03dĞ¡Ê±%02d·ÖÖÓ%02dÃë\n",atoi(temp)/3600,atoi(temp)/60%60,atoi(temp)%60); //atoi(string)×ªÕûÊı 
+							printf("\næ‚¨è¿™ä¸ªæœˆæ‰€ç”¨æ—¶é—´: %03då°æ—¶%02dåˆ†é’Ÿ%02dç§’\n",atoi(temp)/3600,atoi(temp)/60%60,atoi(temp)%60); //atoi(string)è½¬æ•´æ•° 
 						if(flag==9)
 						{
-							printf("\nÄú µÄ µÇ Èë  IP : %s\n",temp);
+							printf("\næ‚¨ çš„ ç™» å…¥  IP : %s\n",temp);
 							break;
 						}
 						j++; 
@@ -296,13 +296,13 @@ int HTTP_GET_INFO(CURL *curl,CURLcode res)
 			printf("\n----------------------------------------\n");
 			return 1;
 		} 
-	curl_easy_cleanup(curl);//ÇåÀí
+	curl_easy_cleanup(curl);//æ¸…ç†
 }
 
 void PRINT_WELCOME_INFO(void)
-{//Êä³ö»¶Ó­ĞÅÏ¢
+{//è¾“å‡ºæ¬¢è¿ä¿¡æ¯
 	printf("\n----------------------------------------\n");
-	printf("      »¶Ó­Ê¹ÓÃĞ£Ô°ÍøµÇÂ½Æ÷ C ÓïÑÔ°æ     \n");	
+	printf("      æ¬¢è¿ä½¿ç”¨æ ¡å›­ç½‘ç™»é™†å™¨ C è¯­è¨€ç‰ˆ     \n");	
 	printf("Made By CHN-STUDENT && MouYouLing V0.0.7\n");
 	printf("\n----------------------------------------\n");
 }
@@ -310,32 +310,32 @@ void PRINT_WELCOME_INFO(void)
 int main()
 { 
     
-	system("mode con cols=40");//ÉèÖÃ¿í¶È40
-	system("color A");//×ÖÌåÉèÖÃÎªÂÌÉ« 
+	system("mode con cols=40");//è®¾ç½®å®½åº¦40
+	system("color A");//å­—ä½“è®¾ç½®ä¸ºç»¿è‰² 
 	PRINT_WELCOME_INFO();
-	int state=0;//¶¨Òå×´Ì¬£¬0´ú±íÎ´µÇÂ¼£¬1´ú±íÒÑ¾­µÇÂ½£¬Ä¬ÈÏÎ´µÇÂ¼ 
-  	CURL *curl;//¶¨ÒåCURLµÄ¾ä±ú 
-  	CURLcode res;//¶¨ÒåCURL·´À¡½á¹û
-  	curl_global_init(CURL_GLOBAL_ALL);//È«¾Ö³õÊ¼»¯ 
-  	curl = curl_easy_init(); //CURL¾ä±ú³õÊ¼»¯ 
+	int state=0;//å®šä¹‰çŠ¶æ€ï¼Œ0ä»£è¡¨æœªç™»å½•ï¼Œ1ä»£è¡¨å·²ç»ç™»é™†ï¼Œé»˜è®¤æœªç™»å½• 
+  	CURL *curl;//å®šä¹‰CURLçš„å¥æŸ„ 
+  	CURLcode res;//å®šä¹‰CURLåé¦ˆç»“æœ
+  	curl_global_init(CURL_GLOBAL_ALL);//å…¨å±€åˆå§‹åŒ– 
+  	curl = curl_easy_init(); //CURLå¥æŸ„åˆå§‹åŒ– 
   	if(!(curl))
-  	{//Èç¹û·ÇÕı³£³õÊ¼»¯ 
-	 	printf("\nLibcurl³õÊ¼»¯Ê§°Ü£¬ÇëÖØĞÂ´ò¿ª±¾³ÌĞòÖØÊÔ!\n");
+  	{//å¦‚æœéæ­£å¸¸åˆå§‹åŒ– 
+	 	printf("\nLibcurlåˆå§‹åŒ–å¤±è´¥ï¼Œè¯·é‡æ–°æ‰“å¼€æœ¬ç¨‹åºé‡è¯•!\n");
 	 	system("pause"); 
 	 	exit(-1); 
 	}
 	if(curl)
-	{//Èç¹ûÕı³£³õÊ¼»¯
-		state=HTTP_GET_INFO(curl,res);//HTTP-GETµÃµ½ÓÃ»§ĞÅÏ¢
+	{//å¦‚æœæ­£å¸¸åˆå§‹åŒ–
+		state=HTTP_GET_INFO(curl,res);//HTTP-GETå¾—åˆ°ç”¨æˆ·ä¿¡æ¯
 	   	if(state==0)
-	   	{//Î´µÇÂ¼ 
+	   	{//æœªç™»å½• 
 		    HTTP_LOGIN(curl,res); 
 	   	} 
 	   	if(state==1)
 	   	{
 	   		while(1)
 	   		{
-			   	printf("\n     ÄúÊÇ·ñÒª×¢Ïú£¿<1.×¢Ïú/2.ÍË³ö>:     \n");
+			   	printf("\n     æ‚¨æ˜¯å¦è¦æ³¨é”€ï¼Ÿ<1.æ³¨é”€/2.é€€å‡º>:     \n");
 	   			char input=getch();
 	   			if(input=='1')
 	   			{ 
@@ -347,13 +347,13 @@ int main()
 				else
 				{
 					printf("\n----------------------------------------\n");
-					printf("\n             ÊäÈë´íÎóÇëÖØÊÔ!            \n"); 
+					printf("\n             è¾“å…¥é”™è¯¯è¯·é‡è¯•!            \n"); 
 					printf("\n----------------------------------------\n");
 				}
 			}
 			if(state==0)
 			{
-				printf("\n     ÄúÊÇ·ñÒªÖØµÇ£¿<1.ÖØµÇ/2.ÍË³ö>:     \n");
+				printf("\n     æ‚¨æ˜¯å¦è¦é‡ç™»ï¼Ÿ<1.é‡ç™»/2.é€€å‡º>:     \n");
 				while(1)
 				{
 					char input=getch();
@@ -367,7 +367,7 @@ int main()
 	   				else
 					{
 						printf("\n----------------------------------------\n");
-						printf("\n             ÊäÈë´íÎóÇëÖØÊÔ!            \n"); 
+						printf("\n             è¾“å…¥é”™è¯¯è¯·é‡è¯•!            \n"); 
 						printf("\n----------------------------------------\n");
 					}
 				} 
