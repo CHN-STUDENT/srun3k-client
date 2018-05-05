@@ -11,7 +11,7 @@ Srun3k Client written in C for haut network authorization
 
 # 更新日志
 
-### 仍在研究中...
+### 除非发现BUG 暂时弃坑...
 
 ### 源码在本项目`src`目录,编译好程序在`bin`目录
 
